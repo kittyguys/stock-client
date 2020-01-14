@@ -81,12 +81,10 @@ const SignupForm = () => {
         <Border>
           <Span>or</Span>
         </Border>
-        <FormBlock>
-          <Button onClick={() => Router.push("/signin")}>
-            既にアカウントをお持ちの方はこちら
-          </Button>
-        </FormBlock>
       </form>
+      <FormBlock>
+        <Button onClick={() => Router.push("/signin")}>ログインはこちら</Button>
+      </FormBlock>
     </Wrapper>
   );
 };
@@ -100,14 +98,15 @@ const Wrapper = styled.div`
 
 const Logo = styled(BaseLogo)`
   display: block;
-  font-size: 40px;
+  font-size: 24px;
+  text-align: center;
 `;
 
 const Title = styled.div`
-  display: inline-block;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   margin-top: 12px;
+  text-align: center;
 `;
 
 const FormBlock = styled.div`
