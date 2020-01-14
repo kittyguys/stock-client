@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
 import { IoIosList as BaseIconDrawerOpen } from "react-icons/io";
 import StockList from "@src/common/components/shared/StockList";
-import { toggleDrawer } from "@src/features/stock/actions";
+import { toggleDrawer } from "@src/features/stocks/actions";
 import { useDispatch } from "react-redux";
 
 type Props = {
