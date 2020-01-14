@@ -14,8 +14,8 @@ import {
   getStocksAsync,
   createStockAsync,
   reorderStocksAsync
-} from "@src/features/stock/operations";
-import { reorderStocks } from "@src/features/stock/actions";
+} from "@src/features/stocks/operations";
+import { reorderStocks } from "@src/features/stocks/actions";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -28,7 +28,7 @@ const StockNoteCreate: React.FC = () => {
   const [isSignin, setIsSignin] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const stocks = useSelector((state: any) => state.stock.stocks);
+  const stocks = useSelector((state: any) => state.stocks.stocks);
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
