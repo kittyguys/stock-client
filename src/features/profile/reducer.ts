@@ -1,11 +1,5 @@
 import produce from "immer";
-
-type State = {
-  userName: string;
-  displayName: string;
-  email: string;
-  profile_image_url: string;
-};
+import { State } from "./types";
 
 const initialState: State = {
   userName: "",
