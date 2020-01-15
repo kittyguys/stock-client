@@ -2,7 +2,7 @@ import { NextPage, NextPageContext } from "next";
 import { useSelector } from "react-redux";
 import cookies from "next-cookies";
 import jwt_decode from "jwt-decode";
-import Signin from "./signin";
+import Signup from "./signup";
 import { States } from "@src/app/types";
 import { signinSuccess } from "@src/features/auth/actions";
 import { updateProfileSuccess } from "@src/features/profile/actions";
@@ -28,7 +28,7 @@ const Root: NextPage<Props> = ({ store }) => {
       </>
     );
   }
-  return <Signin />;
+  return <Signup />;
 };
 
 Root.getInitialProps = async (ctx: Context) => {
