@@ -1,17 +1,16 @@
 import Router from "next/router";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import axios from "axios";
 import BaseLogo from "@src/common/components/shared/Logo";
 import { signup } from "@src/features/auth/operations";
 import { FormValues } from "./types";
 
 const schema = yup.object().shape({
-  user_name: yup
-    .string()
-    .min(8, "パスワードは8文字以上で設定してください。")
-    .required("ユーザーネームは必須項目です。"),
+  user_name: yup.string().required("IDは必須項目です。"),
   email: yup
     .string()
     .email("形式がメールアドレスではありません。")
@@ -23,17 +22,37 @@ const schema = yup.object().shape({
   password_confirm: yup
     .string()
     .oneOf([yup.ref("password")], "パスワードが一致しません。")
-    .required("パスワードの確認は必須です。")
+    .required("パスワードの確認は必須項目です。")
 });
 
 const SignupForm = () => {
-  const { register, handleSubmit, errors } = useForm({
+  const [isUnique, setIsUnique] = useState(false);
+  const { register, handleSubmit, errors, setError, clearError } = useForm<
+    FormValues
+  >({
     validationSchema: schema
   });
   const dispatch = useDispatch();
-  const onSubmit = (data: FormValues) => {
-    delete data.password_confirm;
-    dispatch(signup(data));
+  const onSubmit = (values: FormValues) => {
+    if (isUnique) {
+      delete values.password_confirm;
+      dispatch(signup(values));
+    } else {
+      setError("user_name", "duplicated", "こちらのIDはお使いになれません。");
+    }
+  };
+  const handleChange = async (e: any) => {
+    const user_name = e.target.value;
+    const result = await axios
+      .post("http://localhost:8080/api/unique/username", { user_name })
+      .then(res => {
+        return res.data.isUnique;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    setIsUnique(result);
+    return result;
   };
   return (
     <Wrapper>
@@ -44,19 +63,33 @@ const SignupForm = () => {
           <Input
             name="user_name"
             ref={register({ required: true })}
-            placeholder="ユーザーネーム"
+            placeholder="ID"
+            onChange={e => {
+              (async function() {
+                const result = await handleChange(e);
+                if (!result) {
+                  setError(
+                    "user_name",
+                    "duplicated",
+                    "こちらのIDはお使いになれません。"
+                  );
+                } else {
+                  clearError("user_name");
+                }
+              })();
+            }}
           />
         </FormBlock>
-        <Error>{errors.user_name}</Error>
+        <Error>{errors.user_name && errors.user_name.message}</Error>
         <FormBlock>
           <Input
             name="email"
             type="email"
             ref={register}
-            placeholder="Eメール"
+            placeholder="メールアドレス"
           />
         </FormBlock>
-        <Error>{errors.email}</Error>
+        <Error>{errors.email && errors.email.message}</Error>
         <FormBlock>
           <Input
             name="password"
@@ -65,18 +98,20 @@ const SignupForm = () => {
             placeholder="パスワード"
           />
         </FormBlock>
-        <Error>{errors.password}</Error>
+        <Error>{errors.password && errors.password.message}</Error>
         <FormBlock>
           <Input
             name="password_confirm"
             type="password"
             ref={register}
-            placeholder="パスワード - 確認"
+            placeholder="パスワードの確認"
           />
         </FormBlock>
-        <Error>{errors.password_confirm}</Error>
+        <Error>
+          {errors.password_confirm && errors.password_confirm.message}
+        </Error>
         <FormBlock>
-          <SubmitButton type="submit" formNoValidate value="登録" />
+          <SubmitButton type="submit" value="登録" formNoValidate />
         </FormBlock>
         <Border>
           <Span>or</Span>
