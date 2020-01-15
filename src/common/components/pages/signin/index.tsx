@@ -22,7 +22,7 @@ const InnerForm = ({ values }: FormikProps<FormValues>) => {
             value={values.signinID}
             type="text"
             name="signinID"
-            placeholder="ユーザーネーム or メールアドレス"
+            placeholder="ID または メールアドレス"
           />
         </FormBlock>
         <FormBlock>
