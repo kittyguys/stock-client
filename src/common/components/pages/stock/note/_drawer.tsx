@@ -9,7 +9,7 @@ type Props = {};
 
 const Drawer: FC<Props> = ({}) => {
   const dispatch = useDispatch();
-  const isDrawerOpen = useSelector((state: any) => state.stock.isDrawerOpen);
+  const isDrawerOpen = useSelector((state: any) => state.stocks.isDrawerOpen);
   return (
     <Root isDrawerOpen={isDrawerOpen}>
       <Title>

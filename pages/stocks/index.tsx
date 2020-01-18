@@ -86,8 +86,8 @@ const Stock: NextPage<Props> = () => {
   const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const isNoteOpen = useSelector((state: any) => state.stock.isNoteEditing);
-  const initialStocks = useSelector((state: any) => state.stock.stocks);
+  const isNoteOpen = useSelector((state: any) => state.stocks.isNoteEditing);
+  const initialStocks = useSelector((state: any) => state.stocks.stocks);
   const [stocks, setStocks] = useState(
     initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content }))
   );
