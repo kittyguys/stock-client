@@ -119,28 +119,9 @@ Twitter: @rich_clark
     overscroll-behavior: none;
     color: #555;
   }
+  
   a, button, input[type="submit"] {
     cursor: pointer;
-  }
-  .quill {
-    width: 100%;
-    height: 100%;
-  }
-  .ql-toolbar {
-    background-color: #eee;
-    border-radius: 4px 4px 0 0;
-  }
-  .ql-container {
-    border-radius: 0 0 4px 4px;
-    padding: 12px 16px;
-  }
-  .ql-editor {
-    background: none;
-    padding: 0;
-    max-height: 24rem;
-    p {
-      font-size: 1.6rem;
-    }
   }
 `;
 
