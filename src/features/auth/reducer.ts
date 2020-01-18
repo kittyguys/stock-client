@@ -1,7 +1,7 @@
 import produce from "immer";
-import { AuthState, AuthAction } from "./types";
+import { State, AuthAction } from "./types";
 
-const InitialState: AuthState = {
+const InitialState: State = {
   isSignin: false
 };
 

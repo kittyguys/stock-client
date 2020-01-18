@@ -1,4 +1,4 @@
-export type AuthState = {
+export type State = {
   isSignin: boolean | string;
 };
 

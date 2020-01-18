@@ -15,7 +15,7 @@ import {
   getStocksAsync,
   createStockAsync,
   reorderStocksAsync
-} from "@src/features/stock/operations";
+} from "@src/features/stocks/operations";
 import { getNoteAsync, createNoteAsync } from "@src/features/notes/operations";
 import Drawer from "./_drawer";
 

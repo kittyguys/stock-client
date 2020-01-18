@@ -16,8 +16,8 @@ import { updateProfileSuccess } from "@src/features/profile/actions";
 import Header from "@src/common/components/shared/Header";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
-import { reorderStocks } from "@src/features/stock/actions";
-import { getStocksAsync, addStockAsync } from "@src/features/stock/operations";
+import { reorderStocks } from "@src/features/stocks/actions";
+import { getStocksAsync, addStockAsync } from "@src/features/stocks/operations";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
