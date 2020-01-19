@@ -4,7 +4,8 @@ import { State, Action } from "./types";
 const initialState: State = {
   isNoteEditing: false,
   isDrawerOpen: false,
-  stocks: []
+  stocks: [],
+  activeId: 1
 };
 
 const stocks = produce((state = initialState, action: Action) => {
@@ -15,6 +16,10 @@ const stocks = produce((state = initialState, action: Action) => {
     }
     case "stocks/toggleDrawer": {
       state.isDrawerOpen = !state.isDrawerOpen;
+      return state;
+    }
+    case "stocks/changeActiveId": {
+      state.activeId = state.currentId;
       return state;
     }
     case "stocks/reorder": {

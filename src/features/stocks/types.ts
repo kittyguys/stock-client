@@ -2,6 +2,7 @@ export type State = {
   isNoteEditing: boolean;
   isDrawerOpen: boolean;
   stocks: [];
+  activeId: number;
 };
 
 export type Action = {

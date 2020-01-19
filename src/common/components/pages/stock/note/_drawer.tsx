@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { IoMdClose as BaseIconDrawerClose } from "react-icons/io";
-import { toggleDrawer } from "@src/features/stocks/actions";
+import { toggleDrawer, changeActiveId } from "@src/features/stocks/actions";
 import Color from "@src/common/constants/color";
 
 type Props = {};
@@ -24,7 +24,11 @@ const Drawer: FC<Props> = ({}) => {
       </Title>
       <DrawerWrapper>
         <DrawerItems isCurrent={true}>
-          <Anchor>
+          <Anchor
+            onClick={() => {
+              dispatch(changeActiveId());
+            }}
+          >
             <Span>#</Span>general
           </Anchor>
         </DrawerItems>

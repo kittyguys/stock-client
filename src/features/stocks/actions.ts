@@ -15,6 +15,7 @@ export const REORDER = "stocks/reorder";
 export const REORDER_STOCKS_REQUEST = "stocks/reorder/REQUEST";
 export const REORDER_STOCKS_SUCCESS = "stocks/reorder/SUCCESS";
 export const REORDER_STOCKS_FAIL = "stocks/reorder/FAIL";
+export const CHANGE_STOCK_ACTIVE_ID = "stocks/changeActiveId";
 
 export const toggleNote = () => ({
   type: TOGGLE_NOTE
@@ -22,6 +23,10 @@ export const toggleNote = () => ({
 
 export const toggleDrawer = () => ({
   type: TOGGLE_DRAWER
+});
+
+export const changeActiveId = () => ({
+  type: CHANGE_STOCK_ACTIVE_ID
 });
 
 export const getStocksRequest = () => ({
