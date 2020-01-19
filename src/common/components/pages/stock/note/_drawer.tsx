@@ -11,6 +11,7 @@ type Props = {};
 const Drawer: FC<Props> = ({}) => {
   const dispatch = useDispatch();
   const isDrawerOpen = useSelector((state: any) => state.stocks.isDrawerOpen);
+  const isCurrentId = useSelector((state: any) => state.notes.activeId);
   const tmpList = [
     {
       id: "1",
@@ -35,7 +36,7 @@ const Drawer: FC<Props> = ({}) => {
       </Title>
       <DrawerWrapper>
         {tmpList.map(item => (
-          <DrawerItems isCurrent={false}>
+          <DrawerItems isCurrent={item.id === isCurrentId ? true : false}>
             <Anchor
               onClick={() => {
                 dispatch(switchActiveId(item.id));
