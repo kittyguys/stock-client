@@ -11,7 +11,7 @@ type Props = {};
 const Drawer: FC<Props> = ({}) => {
   const dispatch = useDispatch();
   const isDrawerOpen = useSelector((state: any) => state.stocks.isDrawerOpen);
-  const isCurrentId = useSelector((state: any) => state.notes.activeId);
+  const activeId = useSelector((state: any) => state.notes.activeId);
   // TODO notes一覧完成後削除
   const tmpList = [
     {
@@ -41,7 +41,7 @@ const Drawer: FC<Props> = ({}) => {
       </Title>
       <DrawerWrapper>
         {tmpList.map(item => (
-          <DrawerItems isCurrent={item.id === isCurrentId ? true : false}>
+          <DrawerItems isCurrent={item.id === activeId ? true : false}>
             <Anchor
               onClick={() => {
                 dispatch(switchActiveId(item.id));
