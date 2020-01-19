@@ -4,7 +4,7 @@ import { State, Action } from "./types";
 const initialState: State = {
   notes: [],
   note: {},
-  activeId: ""
+  activeId: "1"
 };
 
 const notes = produce((state = initialState, action: Action) => {

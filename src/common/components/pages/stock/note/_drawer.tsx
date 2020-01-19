@@ -21,6 +21,10 @@ const Drawer: FC<Props> = ({}) => {
     {
       id: "2",
       title: "random"
+    },
+    {
+      id: "3",
+      title: "times_orita"
     }
   ];
   return (
