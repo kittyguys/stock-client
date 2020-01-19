@@ -12,6 +12,7 @@ const Drawer: FC<Props> = ({}) => {
   const dispatch = useDispatch();
   const isDrawerOpen = useSelector((state: any) => state.stocks.isDrawerOpen);
   const isCurrentId = useSelector((state: any) => state.notes.activeId);
+  // TODO notes一覧完成後削除
   const tmpList = [
     {
       id: "1",
