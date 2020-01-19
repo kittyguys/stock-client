@@ -3,11 +3,16 @@ import { State, Action } from "./types";
 
 const initialState: State = {
   notes: [],
-  note: {}
+  note: {},
+  activeId: ""
 };
 
 const notes = produce((state = initialState, action: Action) => {
   switch (action.type) {
+    case "note/switch": {
+      state.activeId = action.payload.id;
+      return state;
+    }
     case "note/reorder": {
       state.note.stocks = action.payload.stocks;
       return state;

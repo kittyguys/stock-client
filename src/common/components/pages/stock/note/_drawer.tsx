@@ -2,7 +2,8 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { IoMdClose as BaseIconDrawerClose } from "react-icons/io";
-import { toggleDrawer, changeActiveId } from "@src/features/stocks/actions";
+import { toggleDrawer } from "@src/features/stocks/actions";
+import { switchActiveId } from "@src/features/notes/actions";
 import Color from "@src/common/constants/color";
 
 type Props = {};
@@ -10,6 +11,16 @@ type Props = {};
 const Drawer: FC<Props> = ({}) => {
   const dispatch = useDispatch();
   const isDrawerOpen = useSelector((state: any) => state.stocks.isDrawerOpen);
+  const tmpList = [
+    {
+      id: "1",
+      title: "general"
+    },
+    {
+      id: "2",
+      title: "random"
+    }
+  ];
   return (
     <Root isDrawerOpen={isDrawerOpen}>
       <Title>
@@ -23,30 +34,18 @@ const Drawer: FC<Props> = ({}) => {
         />
       </Title>
       <DrawerWrapper>
-        <DrawerItems isCurrent={true}>
-          <Anchor
-            onClick={() => {
-              dispatch(changeActiveId());
-            }}
-          >
-            <Span>#</Span>general
-          </Anchor>
-        </DrawerItems>
-        <DrawerItems isCurrent={false}>
-          <Anchor>
-            <Span>#</Span>yasuda thread
-          </Anchor>
-        </DrawerItems>
-        <DrawerItems isCurrent={false}>
-          <Anchor>
-            <Span>#</Span>karube thread
-          </Anchor>
-        </DrawerItems>
-        <DrawerItems isCurrent={false}>
-          <Anchor>
-            <Span>#</Span>tokunaga thread
-          </Anchor>
-        </DrawerItems>
+        {tmpList.map(item => (
+          <DrawerItems isCurrent={false}>
+            <Anchor
+              onClick={() => {
+                dispatch(switchActiveId(item.id));
+              }}
+            >
+              <Span>#</Span>
+              {item.title}
+            </Anchor>
+          </DrawerItems>
+        ))}
       </DrawerWrapper>
     </Root>
   );
