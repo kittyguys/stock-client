@@ -2,14 +2,14 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { IoMdClose as BaseIconDrawerClose } from "react-icons/io";
-import { toggleDrawer } from "@src/features/stock/actions";
+import { toggleDrawer } from "@src/features/stocks/actions";
 import Color from "@src/common/constants/color";
 
 type Props = {};
 
 const Drawer: FC<Props> = ({}) => {
   const dispatch = useDispatch();
-  const isDrawerOpen = useSelector((state: any) => state.stock.isDrawerOpen);
+  const isDrawerOpen = useSelector((state: any) => state.stocks.isDrawerOpen);
   return (
     <Root isDrawerOpen={isDrawerOpen}>
       <Title>

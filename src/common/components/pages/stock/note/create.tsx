@@ -15,7 +15,7 @@ import {
   getStocksAsync,
   createStockAsync,
   reorderStocksAsync
-} from "@src/features/stock/operations";
+} from "@src/features/stocks/operations";
 import { getNoteAsync, createNoteAsync } from "@src/features/notes/operations";
 import Drawer from "./_drawer";
 
@@ -41,7 +41,7 @@ const StockNoteCreate: React.FC = () => {
   const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const stocks = useSelector((state: any) => state.stock.stocks);
+  const stocks = useSelector((state: any) => state.stocks.stocks);
 
   const id2List: {
     [index: string]: string;

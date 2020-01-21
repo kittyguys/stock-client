@@ -2,31 +2,32 @@ import { FC } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { toggleNote } from "@src/features/stock/actions";
+import { toggleNote } from "@src/features/stocks/actions";
 
 type Props = {
-  route: string
+  route: string;
 };
 
 const Nav: FC<Props> = ({ route }) => {
   const dispatch = useDispatch();
-  const handleToggleNote = () => { // TOOD: 切り替えを廃止する場合は削除
-    dispatch(toggleNote())
-  }
+  const handleToggleNote = () => {
+    // TOOD: 切り替えを廃止する場合は削除
+    dispatch(toggleNote());
+  };
   switch (route) {
     case "/stock": {
       return (
         <Link key="stocks" href="/stocks/notes/create">
           <NormalLink>ノートを作成</NormalLink>
         </Link>
-      )
+      );
     }
     default: {
       return (
         <Link key="stocks" href="/stocks">
           <NormalLink>Stocks</NormalLink>
         </Link>
-      )
+      );
     }
   }
 };

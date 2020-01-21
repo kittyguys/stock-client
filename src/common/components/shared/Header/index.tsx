@@ -56,7 +56,7 @@ const Header: NextPage<Props> = ({ route }) => {
     <HeaderWrapper route={route}>
       {route !== "/" && (
         <>
-          <Logo key="logo" handleClick={() => toHome()} />
+          <Logo key="logo" />
           <MainInputForm>
             <MainInputLabel htmlFor="mainInput">
               <IoIosSearch size="20px" color="#9AA0A6" />
