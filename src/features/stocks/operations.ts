@@ -28,7 +28,7 @@ export const getStocksAsync = (): ThunkAction<
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(getStocksRequest());
     axios
-      .get("http://localhost:8080/api/stocks", {
+      .get(`${process.env.API_PATH}:${process.env.API_PORT}/api/stocks`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -51,11 +51,15 @@ export const createStockAsync = (
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(createStockRequest());
     axios
-      .post("http://localhost:8080/api/stocks", data, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      .post(
+        `${process.env.API_PATH}:${process.env.API_PORT}/api/stocks`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
       .then(res => {
         dispatch(createStockSuccess(res.data.stock));
       })
@@ -73,11 +77,15 @@ export const addStockAsync = (
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(addStockRequest());
     axios
-      .patch("http://localhost:8080/api/stocks", data, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      .patch(
+        `${process.env.API_PATH}:${process.env.API_PORT}/api/stocks`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
       .then(res => {
         dispatch(addStockSuccess(res.data.stock));
       })
@@ -99,7 +107,7 @@ export const reorderStocksAsync = (
     dispatch(reorderStocksRequest());
     axios
       .patch(
-        "http://localhost:8080/api/stocks/reorder",
+        `${process.env.API_PATH}:${process.env.API_PORT}/api/stocks/reorder`,
         { stocks },
         {
           headers: {

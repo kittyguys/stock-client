@@ -25,11 +25,13 @@ const SignupFormConfirm: React.FC<Props> = ({ ...props }) => {
       email: props.profile.email,
       password: props.profile.password
     };
-    axios.post("http://localhost:8080/signup", userData).then(res => {
-      localStorage.setItem("token", res.data.token);
-      alert("アカウントの作成が成功しました。");
-      Router.push("/");
-    });
+    axios
+      .post(`${process.env.API_PATH}:${process.env.API_PORT}/signup`, userData)
+      .then(res => {
+        localStorage.setItem("token", res.data.token);
+        alert("アカウントの作成が成功しました。");
+        Router.push("/");
+      });
   };
   return (
     <Wrapper>
@@ -54,52 +56,52 @@ const SignupFormConfirm: React.FC<Props> = ({ ...props }) => {
   );
 };
 
-const Wrapper = styled.div`	
-  width: 486px;	
-  margin: 0 auto;	
-  border: 1px solid #ccc;	
-  border-radius: 4px;	
-  padding: 24px 30px;	
+const Wrapper = styled.div`
+  width: 486px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 24px 30px;
 `;
 
-const Logo = styled(BaseLogo)`	
-  font-size: 28px;	
+const Logo = styled(BaseLogo)`
+  font-size: 28px;
 `;
 
-const Layout1 = styled.div`	
-  margin: 10px 0;	
-  display: inline-block;	
-  margin-right: 10px;	
+const Layout1 = styled.div`
+  margin: 10px 0;
+  display: inline-block;
+  margin-right: 10px;
 `;
 
-const Layout2 = styled.div`	
-  margin: 10px 0;	
+const Layout2 = styled.div`
+  margin: 10px 0;
 `;
 
-const Layout3 = styled.div`	
-  display: flex;	
-  justify-content: center;	
-  margin-top: 10px;	
+const Layout3 = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 `;
 
-const NormalButton = styled(BaseNormalButton)`	
-  font-size: 20px;	
-  width: 180px;	
-  height: 40px;	
-  background-color: #4285f4;	
+const NormalButton = styled(BaseNormalButton)`
+  font-size: 20px;
+  width: 180px;
+  height: 40px;
+  background-color: #4285f4;
 `;
 
-const Title = styled.div`	
-  font-size: 22px;	
+const Title = styled.div`
+  font-size: 22px;
 `;
 
-const Label = styled.div`	
-  font-size: 16px;	
-  color: #999;	
+const Label = styled.div`
+  font-size: 16px;
+  color: #999;
 `;
 
-const Text = styled.div`	
-  font-size: 20px;	
+const Text = styled.div`
+  font-size: 20px;
 `;
 
 export default SignupFormConfirm;
