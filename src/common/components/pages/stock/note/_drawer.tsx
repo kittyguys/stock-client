@@ -41,7 +41,7 @@ const Drawer: FC<Props> = ({}) => {
       </Title>
       <DrawerWrapper>
         {tmpList.map(item => (
-          <DrawerItems isCurrent={item.id === activeId ? true : false}>
+          <DrawerItems isCurrent={item.id === activeId}>
             <Anchor
               onClick={() => {
                 dispatch(switchActiveId(item.id));
