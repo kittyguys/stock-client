@@ -1,5 +1,6 @@
 import { Stock, Note } from "./types";
 
+export const NOTE_SWITCH_ACTIVE_ID = "note/switch";
 export const GET_NOTE_REQUEST = "note/get/REQUEST";
 export const GET_NOTE_SUCCESS = "note/get/SUCCESS";
 export const GET_NOTE_FAIL = "note/get/FAIL";
@@ -16,6 +17,11 @@ export const REORDER = "note/reorder";
 export const REORDER_STOCKS_OF_NOTE_REQUEST = "note/reorder/REQUEST";
 export const REORDER_STOCKS_OF_NOTE_SUCCESS = "note/reorder/SUCCESS";
 export const REORDER_STOCKS_OF_NOTE_FAIL = "note/reorder/FAIL";
+
+export const switchActiveId = (id: string) => ({
+  type: NOTE_SWITCH_ACTIVE_ID,
+  payload: { id }
+});
 
 export const getNoteRequest = () => ({
   type: GET_NOTE_REQUEST

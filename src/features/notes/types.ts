@@ -1,6 +1,7 @@
 export type State = {
   notes: [];
   note: any;
+  activeId: string;
 };
 
 export type Action = {
