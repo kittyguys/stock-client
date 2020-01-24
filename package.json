@@ -37,6 +37,7 @@
     "yup": "^0.28.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^9.4.0",
     "@types/js-cookie": "^2.2.4",
     "@types/jwt-decode": "^2.2.1",
     "@types/next-redux-saga": "^3.0.2",
@@ -51,6 +52,7 @@
     "@types/yup": "^0.26.27",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-styled-components": "^1.10.6",
+    "jest": "^25.1.0",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
     "redux-devtools-extension": "^2.13.8",
