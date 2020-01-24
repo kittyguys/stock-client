@@ -45,7 +45,7 @@ const SignupForm = () => {
     const user_name = e.target.value;
     const result = await axios
       .post(
-        `${process.env.API_PATH}:${process.env.API_PORT}/api/unique/username`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/unique/username`,
         { user_name }
       )
       .then(res => {

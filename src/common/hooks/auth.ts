@@ -11,7 +11,10 @@ export const useSignUp = (params: any) => {
   useEffect(() => {
     async function signUp() {
       await axios
-        .post(`${process.env.API_PATH}:${process.env.API_PORT}/signup`, params)
+        .post(
+          `http://${process.env.API_PATH}:${process.env.API_PORT}/signup`,
+          params
+        )
         .then(res => {
           setData(res.data.token);
           dispatch({ type: "SIGNUP_SUCCESS", payload: { status: true } });

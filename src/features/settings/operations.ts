@@ -27,7 +27,7 @@ export const updateProfile = (
       }
       axios
         .patch(
-          `${process.env.API_PATH}:${process.env.API_PORT}/api/users`,
+          `http://${process.env.API_PATH}:${process.env.API_PORT}/api/users`,
           formData,
           {
             headers: {
@@ -54,7 +54,7 @@ export const updateProfile = (
     } else {
       axios
         .patch(
-          `${process.env.API_PATH}:${process.env.API_PORT}/api/users`,
+          `http://${process.env.API_PATH}:${process.env.API_PORT}/api/users`,
           data,
           {
             headers: {

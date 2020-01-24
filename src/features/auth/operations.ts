@@ -22,7 +22,7 @@ export const signup = (
     dispatch(signupRequest());
     axios
       .post(
-        `${process.env.API_PATH}:${process.env.API_PORT}/api/auth/signup`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/auth/signup`,
         params
       )
       .then(res => {
@@ -47,7 +47,7 @@ export const signin = (
     dispatch(signinRequest());
     axios
       .post(
-        `${process.env.API_PATH}:${process.env.API_PORT}/api/auth/signin`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/auth/signin`,
         params
       )
       .then(res => {

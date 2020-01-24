@@ -26,7 +26,10 @@ const SignupFormConfirm: React.FC<Props> = ({ ...props }) => {
       password: props.profile.password
     };
     axios
-      .post(`${process.env.API_PATH}:${process.env.API_PORT}/signup`, userData)
+      .post(
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/signup`,
+        userData
+      )
       .then(res => {
         localStorage.setItem("token", res.data.token);
         alert("アカウントの作成が成功しました。");

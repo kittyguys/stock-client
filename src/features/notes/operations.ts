@@ -29,7 +29,7 @@ export const getNoteAsync = (
     dispatch(getNoteRequest());
     axios
       .get(
-        `${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -58,7 +58,7 @@ export const renameNoteAsync = ({
     dispatch(renameNoteRequest());
     axios
       .patch(
-        `${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}`,
         { title: newTitle },
         {
           headers: {
@@ -84,7 +84,7 @@ export const createNoteAsync = (
     dispatch(createNoteRequest());
     axios
       .post(
-        `${process.env.API_PATH}:${process.env.API_PORT}/api/notes`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes`,
         {
           title: title
         },
@@ -116,7 +116,7 @@ export const addStockToNoteAsync = ({
     dispatch(addStockToNoteRequest());
     axios
       .patch(
-        `${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}/stocks`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}/stocks`,
         {
           stock: stock
         },
@@ -148,7 +148,7 @@ export const reorderNoteAsync = (
     dispatch(reorderNoteRequest());
     axios
       .patch(
-        `${process.env.API_PATH}:${process.env.API_PORT}/api/notes/reorder`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/reorder`,
         { stocks },
         {
           headers: {
