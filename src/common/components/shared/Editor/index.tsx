@@ -21,51 +21,56 @@ const modules = {
     bindings: {
       exitCode: {
         format: ["code"],
-        key: 39, // →キー
-        handler: function(_range: any, context: any) {
-          if (context.suffix !== "") {
-            return true;
-          }
-          this.quill.format("code", false);
-          const cursorPosition = this.quill.getSelection().index;
-          if (
-            /./.test(this.quill.getText(cursorPosition, cursorPosition + 2))
-          ) {
-            return true;
-          }
-          this.quill.insertText(cursorPosition, " ");
+        key: 39, // Arrow right key
+        handler: function(this: { quill: Quill }, _range: any, context: any) {
+          const quill = this.quill;
+          if (!quill.getSelection()) return; // for strict mode
+
+          // code の中でカーソル位置が右端じゃなければ、通常の→キーを押した挙動
+          if (context.suffix !== "") return true;
+
+          quill.format("code", false);
+          const cursorPosition = quill.getSelection()!.index;
+          const isExistChars = /./.test(
+            quill.getText(cursorPosition, cursorPosition + 2)
+          );
+          if (isExistChars) return true;
+
+          // code の右端で→キーを押したら半角スペースを挿入する
+          quill.insertText(cursorPosition, " ");
         }
       },
       exitCodeBlockUpward: {
         format: ["code-block"],
-        key: 38, // ↑キー
-        handler: function(_range: any, context: any) {
+        key: 38, // Arrow up key
+        handler: function(this: { quill: any }, _range: any, context: any) {
+          const quill = this.quill;
           if (!/^(|\n)$/.test(context.prefix)) {
             return true;
           }
-          const cursorPosition = this.quill.getSelection().index;
+          const cursorPosition = quill.getSelection().index;
           if (cursorPosition === 0) {
-            this.quill.setContents([
-              { insert: "\n" },
-              ...this.quill.getContents().ops
-            ]);
+            quill.setContents([{ insert: "\n" }, ...quill.getContents().ops]);
           }
           return true;
         }
       },
       exitCodeBlockDownward: {
         format: ["code-block"],
-        key: 40, // ↓キー
-        handler: function(_range: any, context: any) {
+        key: 40, // Arrow down key
+        handler: function(this: { quill: Quill }, _range: any, context: any) {
+          const quill = this.quill;
+          if (!quill.getSelection()) return; // for strict mode
+
           if (!/^(|\n)$/.test(context.suffix)) {
             return true;
           }
-          const cursorPosition = this.quill.getSelection().index;
+          const cursorPosition = quill.getSelection()!.index;
           if (
-            this.quill.getLine(cursorPosition + 1)[0].statics.name ===
+            quill.getLine(cursorPosition + 1)[0].statics.name ===
             "SyntaxCodeBlock"
           ) {
-            this.quill.insertText(cursorPosition + 1, "\n");
+            quill.insertText(cursorPosition + 1, "\n");
           }
           return true;
         }
