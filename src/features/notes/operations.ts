@@ -28,11 +28,14 @@ export const getNoteAsync = (
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(getNoteRequest());
     axios
-      .get(`http://localhost:8080/api/notes/${note_id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      .get(
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
       .then(res => {
         dispatch(getNoteSuccess(res.data));
       })
@@ -55,7 +58,7 @@ export const renameNoteAsync = ({
     dispatch(renameNoteRequest());
     axios
       .patch(
-        `http://localhost:8080/api/notes/${note_id}`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}`,
         { title: newTitle },
         {
           headers: {
@@ -81,7 +84,7 @@ export const createNoteAsync = (
     dispatch(createNoteRequest());
     axios
       .post(
-        "http://localhost:8080/api/notes",
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes`,
         {
           title: title
         },
@@ -113,7 +116,7 @@ export const addStockToNoteAsync = ({
     dispatch(addStockToNoteRequest());
     axios
       .patch(
-        `http://localhost:8080/api/notes/${note_id}/stocks`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}/stocks`,
         {
           stock: stock
         },
@@ -145,7 +148,7 @@ export const reorderNoteAsync = (
     dispatch(reorderNoteRequest());
     axios
       .patch(
-        "http://localhost:8080/api/notes/reorder",
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/reorder`,
         { stocks },
         {
           headers: {
