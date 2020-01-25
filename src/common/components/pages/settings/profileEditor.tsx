@@ -9,7 +9,7 @@ import { updateProfile } from "@src/features/settings/operations";
 const ProfileEditor = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state: any) => state.profile);
-  const [imgURL, setImgURL] = useState(null);
+  const [imgURL, setImgURL] = useState<string | undefined>(undefined);
   const { register, handleSubmit, errors } = useForm();
   const formData: any = {
     profile_image_url: null,

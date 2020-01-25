@@ -26,16 +26,23 @@ export const updateProfile = (
         formData.append(entries[i][0], entries[i][1]);
       }
       axios
-        .patch("http://localhost:8080/api/users", formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data"
+        .patch(
+          `http://${process.env.API_PATH}:${process.env.API_PORT}/api/users`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data"
+            }
           }
-        })
+        )
         .then(res => {
           const token = Cookies.get("jwt");
-          const profile: any = jwt_decode(token);
-          const updateDiff: any = jwt_decode(res.data.token);
+          const profile = token && jwt_decode<any>(token!); // TODO
+          if (!profile) {
+            return;
+          }
+          const updateDiff: any = jwt_decode<any>(res.data.token); // TODO
           const newProfile = {
             ...profile,
             ...updateDiff
@@ -49,15 +56,22 @@ export const updateProfile = (
         });
     } else {
       axios
-        .patch("http://localhost:8080/api/users", data, {
-          headers: {
-            Authorization: `Bearer ${token}`
+        .patch(
+          `http://${process.env.API_PATH}:${process.env.API_PORT}/api/users`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
-        })
+        )
         .then(res => {
           const token = Cookies.get("jwt");
-          const profile: any = jwt_decode(token);
-          const updateDiff: any = jwt_decode(res.data.token);
+          const profile = token && jwt_decode<any>(token!); // TODO
+          if (!profile) {
+            return;
+          }
+          const updateDiff = jwt_decode<any>(res.data.token); // TODO
           const newProfile = {
             ...profile,
             ...updateDiff

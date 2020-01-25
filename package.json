@@ -6,7 +6,7 @@
     "start": "next",
     "dev": "next",
     "build": "next build",
-    "prod": "next start"
+    "prod": "next build && next start"
   },
   "author": "",
   "repository": "https://github.com/kittyguys/stock-client",
