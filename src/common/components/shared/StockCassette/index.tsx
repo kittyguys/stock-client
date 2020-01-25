@@ -35,7 +35,8 @@ const StockCassette: React.FC<Props> = ({
               <DateText>
                 {stock.created_at === "now"
                   ? "now"
-                  : format(new Date(stock.created_at), "M/d hh:mma")}
+                  : // TODO サーバー側で SELECT して正規の created_at を返却するようにリファクタする
+                    format(new Date(stock.created_at!), "M/d hh:mma")}
               </DateText>
               {/* <TimeText>更新日時: {stock.updated_at}</TimeText> */}
             </ContentHead>
@@ -61,12 +62,12 @@ const Wrapper = styled.div`
 const Box = styled.div<BoxProps>`
   padding: 8px 12px 12px 12px;
   border-radius: 8px;
-  box-shadow: ${({ snapshot: { isDragging } }) =>
-    isDragging
+  box-shadow: ${({ snapshot }) =>
+    snapshot?.isDragging
       ? "0 3px 9px 0 rgba(0, 0, 0, 0.15)"
       : "0 1px 3px 0 rgba(0, 0, 0, 0.15)"};
-  background-color: ${({ snapshot: { isDragging } }) =>
-    isDragging ? Color.HoverGray : "#fff"};
+  background-color: ${({ snapshot }) =>
+    snapshot?.isDragging ? Color.HoverGray : "#fff"};
   transition: 0.3s width;
   &:hover {
     background-color: ${Color.HoverGray};
