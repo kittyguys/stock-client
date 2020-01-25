@@ -52,11 +52,6 @@ export default class MyDocument extends Document {
               rel="stylesheet"
               href="//cdn.quilljs.com/1.2.6/quill.snow.css"
             />
-            <link
-              rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css"
-            />
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
           </Head>
           <body>
             <Main />
