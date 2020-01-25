@@ -73,7 +73,7 @@ const Header: NextPage<Props> = ({ route }) => {
   );
 };
 
-const HeaderWrapper = styled.div<{ route: string }>`
+const HeaderWrapper = styled.div<{ route?: string }>`
   grid-area: Header;
   display: flex;
   align-items: center;

@@ -51,7 +51,7 @@ const StockCassette: React.FC<Props> = ({
 
 type BoxProps = {
   snapshot?: { isDragging: boolean };
-  note: boolean;
+  note?: boolean;
 };
 
 const Wrapper = styled.div`
