@@ -7,6 +7,13 @@ import { configureStore } from "@src/app/store";
 import { updateProfileSuccess } from "@src/features/profile/actions";
 import GlobalStyle from "@src/common/components/constants/GlobalStyle";
 
+//色調整中
+import "highlight.js/styles/github.css";
+import "highlight.js/styles/railscasts.css";
+// import "react-quill/dist/quill.core.css";
+// import "react-quill/dist/quill.bubble.css";
+// import "highlight.js/styles/darcula.css";
+
 interface Props {
   Component: React.Component;
   store: any;

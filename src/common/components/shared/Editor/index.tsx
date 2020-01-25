@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import ReactDomServer from "react-dom/server";
 import BaseReactQuill, { Quill } from "react-quill";
+
+import hljs from "highlight.js";
+
 import styled from "styled-components";
 import { IoMdCodeWorking, IoMdCode } from "react-icons/io";
 import Color from "@src/common/constants/color";
@@ -16,7 +19,14 @@ icons["code-block"] = ReactDomServer.renderToString(
 );
 icons["code"] = ReactDomServer.renderToString(<IoMdCode size="20px" />);
 
+hljs.configure({
+  languages: ["javascript", "ruby", "python", "rust", "java", "html", "css"]
+});
+
 const modules = {
+  syntax: {
+    highlight: (text: any) => hljs.highlightAuto(text).value
+  },
   keyboard: {
     bindings: {
       exitCode: {

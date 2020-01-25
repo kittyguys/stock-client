@@ -12,6 +12,7 @@
   "repository": "https://github.com/kittyguys/stock-client",
   "license": "ISC",
   "dependencies": {
+    "@types/highlight.js": "^9.12.3",
     "axios": "^0.19.1",
     "date-fns": "^2.9.0",
     "deep-object-diff": "^1.1.0",
