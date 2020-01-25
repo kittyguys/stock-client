@@ -38,8 +38,11 @@ export const updateProfile = (
         )
         .then(res => {
           const token = Cookies.get("jwt");
-          const profile: any = jwt_decode(token);
-          const updateDiff: any = jwt_decode(res.data.token);
+          const profile = token && jwt_decode<any>(token!); // TODO
+          if (!profile) {
+            return;
+          }
+          const updateDiff: any = jwt_decode<any>(res.data.token); // TODO
           const newProfile = {
             ...profile,
             ...updateDiff
@@ -64,8 +67,11 @@ export const updateProfile = (
         )
         .then(res => {
           const token = Cookies.get("jwt");
-          const profile: any = jwt_decode(token);
-          const updateDiff: any = jwt_decode(res.data.token);
+          const profile = token && jwt_decode<any>(token!); // TODO
+          if (!profile) {
+            return;
+          }
+          const updateDiff = jwt_decode<any>(res.data.token); // TODO
           const newProfile = {
             ...profile,
             ...updateDiff

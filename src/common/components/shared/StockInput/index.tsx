@@ -45,7 +45,7 @@ export const MainInput: React.FC<InputProps> = ({
       className={className}
       id={id}
       value={inputValue}
-      onChange={e => handleChange(e.target.value)}
+      onChange={e => handleChange && handleChange(e.target.value)}
     />
   );
 };
