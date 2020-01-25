@@ -18,7 +18,7 @@ class MyApp extends NextApp<Props> {
     const { store } = this.props;
     const isSignin = store.getState().auth.isSignin;
     const token = Cookies.get("jwt");
-    if (isSignin || token) {
+    if (isSignin && token) {
       const profile = jwt_decode(token);
       store.dispatch(updateProfileSuccess(profile));
     }
