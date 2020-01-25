@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { toggleNote } from "@src/features/stocks/actions";
 
 type Props = {
-  route: string;
+  route?: string;
 };
 
 const Nav: FC<Props> = ({ route }) => {
