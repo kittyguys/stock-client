@@ -1,5 +1,8 @@
-import { Stock, Note } from "./types";
+import { Stock, Notes, Note } from "./types";
 
+export const GET_NOTES_REQUEST = "notes/get/REQUEST";
+export const GET_NOTES_SUCCESS = "notes/get/SUCCESS";
+export const GET_NOTES_FAIL = "notes/get/FAIL";
 export const GET_NOTE_REQUEST = "note/get/REQUEST";
 export const GET_NOTE_SUCCESS = "note/get/SUCCESS";
 export const GET_NOTE_FAIL = "note/get/FAIL";
@@ -12,18 +15,36 @@ export const CREATE_NOTE_FAIL = "note/create/FAIL";
 export const ADD_STOCK_TO_NOTE_REQUEST = "note/stock/add/REQUEST";
 export const ADD_STOCK_TO_NOTE_SUCCESS = "note/stock/add/SUCCESS";
 export const ADD_STOCK_TO_NOTE_FAIL = "note/stock/add/FAIL";
-export const REORDER = "note/reorder";
 export const REORDER_STOCKS_OF_NOTE_REQUEST = "note/reorder/REQUEST";
 export const REORDER_STOCKS_OF_NOTE_SUCCESS = "note/reorder/SUCCESS";
 export const REORDER_STOCKS_OF_NOTE_FAIL = "note/reorder/FAIL";
+
+export const getNotesRequest = () => ({
+  type: GET_NOTES_REQUEST
+});
+
+export const getNotesSuccess = (notes: Notes) => ({
+  type: GET_NOTES_SUCCESS,
+  payload: { notes }
+});
+
+export const getNotesFail = () => ({
+  type: GET_NOTES_FAIL
+});
 
 export const getNoteRequest = () => ({
   type: GET_NOTE_REQUEST
 });
 
-export const getNoteSuccess = (res: any) => ({
+export const getNoteSuccess = ({
+  id,
+  stocks
+}: {
+  id: string;
+  stocks: Stock[];
+}) => ({
   type: GET_NOTE_SUCCESS,
-  payload: { res }
+  payload: { id, stocks }
 });
 
 export const getNoteFail = () => ({
@@ -46,10 +67,12 @@ export const createNoteRequest = () => ({
   type: CREATE_NOTE_REQUEST
 });
 
-export const createNoteSuccess = (res: any) => ({
-  type: CREATE_NOTE_SUCCESS,
-  payload: { res }
-});
+export const createNoteSuccess = (note: any) => {
+  return {
+    type: CREATE_NOTE_SUCCESS,
+    payload: { note }
+  };
+};
 
 export const createNoteFail = () => ({
   type: CREATE_NOTE_FAIL
@@ -68,17 +91,14 @@ export const addStockToNoteFail = () => ({
   type: ADD_STOCK_TO_NOTE_FAIL
 });
 
-export const reorderNote = (stocks: Stock[]) => ({
-  type: REORDER,
+export const reorderNoteRequest = (stocks: Stock[]) => ({
+  type: REORDER_STOCKS_OF_NOTE_REQUEST,
   payload: { stocks }
 });
 
-export const reorderNoteRequest = () => ({
-  type: REORDER_STOCKS_OF_NOTE_REQUEST
-});
-
-export const reorderNoteSuccess = () => ({
-  type: REORDER_STOCKS_OF_NOTE_SUCCESS
+export const reorderNoteSuccess = (stocks: Stock[]) => ({
+  type: REORDER_STOCKS_OF_NOTE_SUCCESS,
+  payload: { stocks }
 });
 
 export const reorderNoteFail = () => ({

@@ -3,6 +3,9 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import axios from "axios";
 import Cookies from "js-cookie";
 import {
+  getNotesRequest,
+  getNotesSuccess,
+  getNotesFail,
   getNoteRequest,
   getNoteSuccess,
   getNoteFail,
@@ -19,22 +22,47 @@ import {
   reorderNoteSuccess,
   reorderNoteFail
 } from "./actions";
-import { FormData } from "./types";
+import { Stock } from "./types";
 
-export const getNoteAsync = (
-  note_id: string
-): ThunkAction<void, {}, undefined, AnyAction> => {
+export const getNotesAsync = (): ThunkAction<
+  void,
+  {},
+  undefined,
+  AnyAction
+> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
-    dispatch(getNoteRequest());
+    dispatch(getNotesRequest());
     axios
-      .get(`http://localhost:8080/api/notes/${note_id}`, {
+      .get(`http://localhost:8080/api/notes`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
       .then(res => {
-        dispatch(getNoteSuccess(res.data));
+        dispatch(getNotesSuccess(res.data.notes));
+      })
+      .catch(err => {
+        console.log(err.message);
+        dispatch(getNotesFail());
+      });
+  };
+};
+
+export const getNoteAsync = (
+  id: string
+): ThunkAction<void, {}, undefined, AnyAction> => {
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
+    dispatch(getNoteRequest());
+    axios
+      .get(`http://localhost:8080/api/notes/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        dispatch(getNoteSuccess({ id, stocks: res.data.stocks }));
       })
       .catch(err => {
         console.log(err.message);
@@ -45,10 +73,10 @@ export const getNoteAsync = (
 
 export const renameNoteAsync = ({
   note_id,
-  newTitle
+  title
 }: {
   note_id: string;
-  newTitle: string;
+  title: string;
 }): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
@@ -56,7 +84,7 @@ export const renameNoteAsync = ({
     axios
       .patch(
         `http://localhost:8080/api/notes/${note_id}`,
-        { title: newTitle },
+        { title },
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -92,7 +120,45 @@ export const createNoteAsync = (
         }
       )
       .then(res => {
-        dispatch(createNoteSuccess(res.data));
+        dispatch(createNoteSuccess(res.data.note));
+      })
+      .catch(err => {
+        console.log(err.message);
+        dispatch(createNoteFail());
+      });
+  };
+};
+
+export const createNoteAndAddStockAsync = ({
+  title,
+  stock_id
+}: {
+  title: string;
+  stock_id: string;
+}): ThunkAction<void, {}, undefined, AnyAction> => {
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
+    dispatch(createNoteRequest());
+    axios
+      .post(
+        "http://localhost:8080/api/notes",
+        {
+          title
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then(res => {
+        dispatch(createNoteSuccess(res.data.note));
+        dispatch(
+          addStockToNoteAsync({
+            note_id: res.data.note.id,
+            stock_id
+          })
+        );
       })
       .catch(err => {
         console.log(err.message);
@@ -103,19 +169,19 @@ export const createNoteAsync = (
 
 export const addStockToNoteAsync = ({
   note_id,
-  stock
+  stock_id
 }: {
   note_id: string;
-  stock: any;
+  stock_id: string;
 }): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(addStockToNoteRequest());
     axios
-      .patch(
+      .post(
         `http://localhost:8080/api/notes/${note_id}/stocks`,
         {
-          stock: stock
+          stock_id
         },
         {
           headers: {
@@ -124,8 +190,7 @@ export const addStockToNoteAsync = ({
         }
       )
       .then(res => {
-        const reversed = res.data.stocks.revers();
-        dispatch(addStockToNoteSuccess(reversed));
+        dispatch(addStockToNoteSuccess(res.data.stock));
       })
       .catch(err => {
         console.log(err.message);
@@ -134,19 +199,23 @@ export const addStockToNoteAsync = ({
   };
 };
 
-export const reorderNoteAsync = (
-  data: any
-): ThunkAction<void, {}, undefined, AnyAction> => {
+export const reorderNoteAsync = ({
+  note_id,
+  stocks
+}: {
+  note_id: string;
+  stocks: Stock[];
+}): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
-    const stocks = data.map((item: any) => {
+    const stockIds = stocks.map((item: Stock) => {
       return item.id;
     });
-    dispatch(reorderNoteRequest());
+    dispatch(reorderNoteRequest(stocks));
     axios
       .patch(
-        "http://localhost:8080/api/notes/reorder",
-        { stocks },
+        `http://localhost:8080/api/notes/${note_id}/reorder`,
+        { stocks: stockIds },
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -154,7 +223,7 @@ export const reorderNoteAsync = (
         }
       )
       .then(res => {
-        dispatch(reorderNoteSuccess());
+        dispatch(reorderNoteSuccess(res.data.stocks));
       })
       .catch(err => {
         console.log(err.message);

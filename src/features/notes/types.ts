@@ -13,9 +13,16 @@ export type FormData = {
 };
 
 export type Stock = {
-  id: number;
+  id: string;
   content: string;
+  created_at: Date | string;
 };
+
+export type Notes = Array<{
+  id: string;
+  title: string;
+  created_at: string;
+}>;
 
 export type Note = {
   stocks: Stock[];

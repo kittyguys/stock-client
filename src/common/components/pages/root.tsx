@@ -31,19 +31,17 @@ const StockNoteCreate: React.FC = () => {
   const stocks = useSelector((state: any) => state.stocks.stocks);
 
   const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
+    const { source, destination } = result;
+
+    if (!destination) {
       return;
     }
 
-    if (result.destination.index === result.source.index) {
+    if (source.index === destination.index) {
       return;
     }
 
-    const reorderedStocks = reorder(
-      stocks,
-      result.source.index,
-      result.destination.index
-    );
+    const reorderedStocks = reorder(stocks, source.index, destination.index);
 
     dispatch(reorderStocks(reorderedStocks));
     dispatch(reorderStocksAsync(reorderedStocks));

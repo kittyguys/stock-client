@@ -3,20 +3,33 @@ import { State, Action } from "./types";
 
 const initialState: State = {
   notes: [],
-  note: {}
+  note: {
+    id: "",
+    title: "",
+    stocks: []
+  }
 };
 
 const notes = produce((state = initialState, action: Action) => {
   switch (action.type) {
-    case "note/reorder": {
-      state.note.stocks = action.payload.stocks;
+    case "notes/get/REQUEST": {
+      return state;
+    }
+    case "notes/get/SUCCESS": {
+      state.notes = action.payload.notes;
+      return state;
+    }
+    case "notes/get/FAIL": {
       return state;
     }
     case "note/get/REQUEST": {
       return state;
     }
     case "note/get/SUCCESS": {
-      state.note = action.payload;
+      state.note = {
+        ...state.note,
+        ...action.payload
+      };
       return state;
     }
     case "note/get/FAIL": {
@@ -37,6 +50,10 @@ const notes = produce((state = initialState, action: Action) => {
     }
     case "note/create/SUCCESS": {
       state.notes.push(action.payload.note);
+      state.note = {
+        ...state.note,
+        ...action.payload.note
+      };
       return state;
     }
     case "note/create/FAIL": {
@@ -46,10 +63,21 @@ const notes = produce((state = initialState, action: Action) => {
       return state;
     }
     case "note/stock/add/SUCCESS": {
-      state.note.stocks.push(action.payload.stock);
+      state.note.stocks.push(...action.payload.stock);
       return state;
     }
     case "note/stock/add/FAIL": {
+      return state;
+    }
+    case "note/reorder/REQUEST": {
+      state.note.stocks = action.payload.stocks;
+      return state;
+    }
+    case "note/reorder/SUCCESS": {
+      state.note.stocks = action.payload.stocks;
+      return state;
+    }
+    case "note/reorder/FAIL": {
       return state;
     }
     default:
