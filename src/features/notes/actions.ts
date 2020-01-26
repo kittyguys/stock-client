@@ -15,6 +15,11 @@ export const CREATE_NOTE_FAIL = "note/create/FAIL";
 export const ADD_STOCK_TO_NOTE_REQUEST = "note/stock/add/REQUEST";
 export const ADD_STOCK_TO_NOTE_SUCCESS = "note/stock/add/SUCCESS";
 export const ADD_STOCK_TO_NOTE_FAIL = "note/stock/add/FAIL";
+export const CREATE_NOTE_AND_ADD_STOCK_REQUEST =
+  "note/create/stock/add/REQUEST";
+export const CREATE_NOTE_AND_ADD_STOCK_SUCCESS =
+  "note/create/stock/add/SUCCESS";
+export const CREATE_NOTE_AND_ADD_STOCK_FAIL = "note/create/stock/add/FAIL";
 export const REORDER_STOCKS_OF_NOTE_REQUEST = "note/reorder/REQUEST";
 export const REORDER_STOCKS_OF_NOTE_SUCCESS = "note/reorder/SUCCESS";
 export const REORDER_STOCKS_OF_NOTE_FAIL = "note/reorder/FAIL";
@@ -89,6 +94,19 @@ export const addStockToNoteSuccess = (stock: Stock) => ({
 
 export const addStockToNoteFail = () => ({
   type: ADD_STOCK_TO_NOTE_FAIL
+});
+
+export const createNoteAndAddStockRequest = (title: string, stock: Stock) => ({
+  type: CREATE_NOTE_AND_ADD_STOCK_REQUEST,
+  payload: { title, stock }
+});
+
+export const createNoteAndAddStockSuccess = () => ({
+  type: CREATE_NOTE_AND_ADD_STOCK_SUCCESS
+});
+
+export const createNoteAndAddStockFail = () => ({
+  type: CREATE_NOTE_AND_ADD_STOCK_FAIL
 });
 
 export const reorderNoteRequest = (stocks: Stock[]) => ({

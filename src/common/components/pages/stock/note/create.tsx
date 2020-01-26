@@ -92,7 +92,7 @@ const StockNoteCreate: React.FC = () => {
         dispatch(
           createNoteAndAddStockAsync({
             title: "untitled",
-            stock_id: sourceStocks[source.index].id
+            stock: sourceStocks[source.index]
           })
         );
         return;

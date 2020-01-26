@@ -69,6 +69,17 @@ const notes = produce((state = initialState, action: Action) => {
     case "note/stock/add/FAIL": {
       return state;
     }
+    case "note/create/stock/add/REQUEST": {
+      state.note.title = action.payload.title;
+      state.note.stocks.push(action.payload.stock);
+      return state;
+    }
+    case "note/create/stock/add/SUCCESS": {
+      return state;
+    }
+    case "note/create/stock/add/FAIL": {
+      return state;
+    }
     case "note/reorder/REQUEST": {
       state.note.stocks = action.payload.stocks;
       return state;

@@ -18,6 +18,9 @@ import {
   addStockToNoteRequest,
   addStockToNoteSuccess,
   addStockToNoteFail,
+  createNoteAndAddStockRequest,
+  createNoteAndAddStockSuccess,
+  createNoteAndAddStockFail,
   reorderNoteRequest,
   reorderNoteSuccess,
   reorderNoteFail
@@ -129,59 +132,6 @@ export const createNoteAsync = (
   };
 };
 
-export const createNoteAndAddStockAsync = ({
-  title,
-  stock_id
-}: {
-  title: string;
-  stock_id: string;
-}): ThunkAction<void, {}, undefined, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
-    dispatch(createNoteRequest());
-    axios
-      .post(
-        "http://localhost:8080/api/notes",
-        {
-          title
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then(res => {
-        const note_id = res.data.note.id;
-        dispatch(createNoteSuccess(note_id));
-        dispatch(addStockToNoteRequest());
-        axios
-          .post(
-            `http://localhost:8080/api/notes/${note_id}/stocks`,
-            {
-              stock_id
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          )
-          .then(res => {
-            dispatch(addStockToNoteSuccess(res.data.stock));
-          })
-          .catch(err => {
-            console.log(err.message);
-            dispatch(addStockToNoteFail());
-          });
-      })
-      .catch(err => {
-        console.log(err.message);
-        dispatch(createNoteFail());
-      });
-  };
-};
-
 export const addStockToNoteAsync = ({
   note_id,
   stock_id
@@ -207,6 +157,60 @@ export const addStockToNoteAsync = ({
       .catch(err => {
         console.log(err.message);
         dispatch(addStockToNoteFail());
+      });
+  };
+};
+
+export const createNoteAndAddStockAsync = ({
+  title,
+  stock
+}: {
+  title: string;
+  stock: Stock;
+}): ThunkAction<void, {}, undefined, AnyAction> => {
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
+    dispatch(createNoteAndAddStockRequest(title, stock));
+    axios
+      .post(
+        "http://localhost:8080/api/notes",
+        {
+          title
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then(res => {
+        const note = res.data.note;
+        const stock_id = stock.id;
+        dispatch(createNoteSuccess(note));
+        axios
+          .post(
+            `http://localhost:8080/api/notes/${note.id}/stocks`,
+            {
+              stock_id
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          .then(() => {
+            dispatch(createNoteAndAddStockSuccess());
+          })
+          .catch(err => {
+            console.log(err.message);
+            dispatch(addStockToNoteFail());
+          });
+      })
+      .catch(err => {
+        console.log(err.message);
+        dispatch(createNoteFail());
+        dispatch(createNoteAndAddStockFail());
       });
   };
 };
