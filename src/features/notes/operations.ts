@@ -37,7 +37,7 @@ export const getNotesAsync = (): ThunkAction<
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(getNotesRequest());
     axios
-      .get(`http://localhost:8080/api/notes`, {
+      .get(`http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -59,11 +59,14 @@ export const getNoteAsync = (
     const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(getNoteRequest());
     axios
-      .get(`http://localhost:8080/api/notes/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      .get(
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
       .then(res => {
         dispatch(getNoteSuccess({ id, stocks: res.data.stocks }));
       })
@@ -86,7 +89,7 @@ export const renameNoteAsync = ({
     dispatch(renameNoteRequest());
     axios
       .patch(
-        `http://localhost:8080/api/notes/${note_id}`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}`,
         { title },
         {
           headers: {
@@ -112,7 +115,7 @@ export const createNoteAsync = (
     dispatch(createNoteRequest());
     axios
       .post(
-        "http://localhost:8080/api/notes",
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes`,
         {
           title: title
         },
@@ -144,7 +147,7 @@ export const addStockToNoteAsync = ({
     dispatch(addStockToNoteRequest());
     axios
       .post(
-        `http://localhost:8080/api/notes/${note_id}/stocks`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}/stocks`,
         {
           stock_id
         },
@@ -173,7 +176,7 @@ export const createNoteAndAddStockAsync = ({
     dispatch(createNoteAndAddStockRequest(title, stock));
     axios
       .post(
-        "http://localhost:8080/api/notes",
+        "http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes",
         {
           title
         },
@@ -189,7 +192,7 @@ export const createNoteAndAddStockAsync = ({
         dispatch(createNoteSuccess(note));
         axios
           .post(
-            `http://localhost:8080/api/notes/${note.id}/stocks`,
+            `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note.id}/stocks`,
             {
               stock_id
             },
@@ -230,7 +233,7 @@ export const reorderNoteAsync = ({
     dispatch(reorderNoteRequest(stocks));
     axios
       .patch(
-        `http://localhost:8080/api/notes/${note_id}/reorder`,
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}/reorder`,
         { stocks: stockIds },
         {
           headers: {

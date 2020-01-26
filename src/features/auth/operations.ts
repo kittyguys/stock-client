@@ -21,7 +21,10 @@ export const signup = (
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     dispatch(signupRequest());
     axios
-      .post("http://localhost:8080/api/auth/signup", params)
+      .post(
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/auth/signup`,
+        params
+      )
       .then(res => {
         const profile = jwt_decode(res.data.token);
         Cookies.set("jwt", res.data.token);
@@ -43,7 +46,10 @@ export const signin = (
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     dispatch(signinRequest());
     axios
-      .post("http://localhost:8080/api/auth/signin", params)
+      .post(
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/auth/signin`,
+        params
+      )
       .then(res => {
         const profile = jwt_decode(res.data.token);
         Cookies.set("jwt", res.data.token);

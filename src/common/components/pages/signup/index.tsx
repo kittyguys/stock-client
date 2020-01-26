@@ -44,7 +44,10 @@ const SignupForm = () => {
   const handleChange = async (e: any) => {
     const user_name = e.target.value;
     const result = await axios
-      .post("http://localhost:8080/api/unique/username", { user_name })
+      .post(
+        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/unique/username`,
+        { user_name }
+      )
       .then(res => {
         return res.data.isUnique;
       })

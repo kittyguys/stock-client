@@ -7,11 +7,16 @@ const initialState: State = {
     id: "",
     title: "",
     stocks: []
-  }
+  },
+  activeId: "1"
 };
 
 const notes = produce((state = initialState, action: Action) => {
   switch (action.type) {
+    case "note/switch": {
+      state.activeId = action.payload.id;
+      return state;
+    }
     case "notes/get/REQUEST": {
       return state;
     }
@@ -20,6 +25,10 @@ const notes = produce((state = initialState, action: Action) => {
       return state;
     }
     case "notes/get/FAIL": {
+      return state;
+    }
+    case "note/reorder": {
+      state.note.stocks = action.payload.stocks;
       return state;
     }
     case "note/get/REQUEST": {
