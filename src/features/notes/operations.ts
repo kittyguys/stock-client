@@ -152,13 +152,28 @@ export const createNoteAndAddStockAsync = ({
         }
       )
       .then(res => {
-        dispatch(createNoteSuccess(res.data.note));
-        dispatch(
-          addStockToNoteAsync({
-            note_id: res.data.note.id,
-            stock_id
+        const note_id = res.data.note.id;
+        dispatch(createNoteSuccess(note_id));
+        dispatch(addStockToNoteRequest());
+        axios
+          .post(
+            `http://localhost:8080/api/notes/${note_id}/stocks`,
+            {
+              stock_id
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          .then(res => {
+            dispatch(addStockToNoteSuccess(res.data.stock));
           })
-        );
+          .catch(err => {
+            console.log(err.message);
+            dispatch(addStockToNoteFail());
+          });
       })
       .catch(err => {
         console.log(err.message);
@@ -189,9 +204,6 @@ export const addStockToNoteAsync = ({
           }
         }
       )
-      .then(res => {
-        dispatch(addStockToNoteSuccess(res.data.stock));
-      })
       .catch(err => {
         console.log(err.message);
         dispatch(addStockToNoteFail());
