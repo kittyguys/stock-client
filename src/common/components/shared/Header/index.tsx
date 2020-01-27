@@ -11,6 +11,7 @@ import BaseAvatar from "../Avatar";
 import BaseLogo from "../Logo";
 import { useSelector } from "react-redux";
 import Nav from "./_nav";
+import { States } from "@src/app/types";
 import { UserModal } from "@src/common/components/shared/Modals";
 import Color from "@src/common/constants/color";
 
@@ -19,7 +20,7 @@ type Props = {
 };
 
 const Header: NextPage<Props> = ({ route }) => {
-  const isSignin = useSelector((state: any) => state.auth.isSignin);
+  const isSignin = useSelector((state: States) => state.auth.isSignin);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toHome = () => {
     Router.push("/");

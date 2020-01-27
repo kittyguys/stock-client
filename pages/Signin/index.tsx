@@ -3,10 +3,11 @@ import Router from "next/router";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { States } from "@src/app/types";
 import SigninForm from "@src/common/components/pages/signin";
 
 const Signin: NextPage = () => {
-  const isSignin = useSelector((state: any) => state.auth.isSignin);
+  const isSignin = useSelector((state: States) => state.auth.isSignin);
 
   useEffect(() => {
     if (isSignin) {

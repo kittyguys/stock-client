@@ -3,6 +3,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Cookies from "js-cookie";
+import { States } from "@src/app/types";
 import { signout } from "@src/features//auth/actions";
 import BaseAvatar from "../Avatar";
 
@@ -10,7 +11,7 @@ type Props = {};
 
 const UserModal: FC<Props> = () => {
   const dispatch = useDispatch();
-  const profile = useSelector((state: any) => state.profile);
+  const profile = useSelector((state: States) => state.profile);
   const handleClick = (e: any) => {
     e.stopPropagation();
   };

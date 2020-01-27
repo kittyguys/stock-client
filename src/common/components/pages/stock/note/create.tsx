@@ -7,6 +7,7 @@ import {
   DropResult,
   resetServerContext
 } from "react-beautiful-dnd";
+import { States } from "@src/app/types";
 import { Stock, StockLists } from "@src/common/components/pages/stock/types";
 import { move, reorder } from "@src/common/components/pages/stock/funcs";
 import Color from "@src/common/constants/color";
@@ -41,7 +42,7 @@ const StockNoteCreate: React.FC = () => {
   const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const stocks = useSelector((state: any) => state.stocks.stocks);
+  const stocks = useSelector((state: States) => state.stocks.stocks);
 
   const id2List: {
     [index: string]: string;

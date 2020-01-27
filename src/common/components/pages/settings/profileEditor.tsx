@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { updatedDiff } from "deep-object-diff";
+import { States } from "@src/app/types";
 import BaseAvatar from "@src/common/components/shared/Avatar";
 import { updateProfile } from "@src/features/settings/operations";
 
 const ProfileEditor = () => {
   const dispatch = useDispatch();
-  const profile = useSelector((state: any) => state.profile);
+  const profile = useSelector((state: States) => state.profile);
   const [imgURL, setImgURL] = useState(null);
   const { register, handleSubmit, errors } = useForm();
   const formData: any = {

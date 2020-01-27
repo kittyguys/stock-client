@@ -7,6 +7,7 @@ import {
   DropResult,
   resetServerContext
 } from "react-beautiful-dnd";
+import { States } from "@src/app/types";
 import { reorder } from "@src/common/components/pages/stock/funcs";
 import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
@@ -28,7 +29,7 @@ const StockNoteCreate: React.FC = () => {
   const [isSignin, setIsSignin] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const stocks = useSelector((state: any) => state.stocks.stocks);
+  const stocks = useSelector((state: States) => state.stocks.stocks);
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {

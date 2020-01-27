@@ -2,6 +2,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { IoMdClose as BaseIconDrawerClose } from "react-icons/io";
+import { States } from "@src/app/types";
 import { toggleDrawer } from "@src/features/stocks/actions";
 import { switchActiveId } from "@src/features/notes/actions";
 import Color from "@src/common/constants/color";
@@ -10,8 +11,10 @@ type Props = {};
 
 const Drawer: FC<Props> = ({}) => {
   const dispatch = useDispatch();
-  const isDrawerOpen = useSelector((state: any) => state.stocks.isDrawerOpen);
-  const activeId = useSelector((state: any) => state.notes.activeId);
+  const isDrawerOpen = useSelector(
+    (state: States) => state.stocks.isDrawerOpen
+  );
+  const activeId = useSelector((state: States) => state.notes.activeId);
   // TODO notes一覧完成後削除
   const tmpList = [
     {

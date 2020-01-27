@@ -11,6 +11,7 @@ import {
 } from "react-beautiful-dnd";
 import cookies from "next-cookies";
 import jwt_decode from "jwt-decode";
+import { States } from "@src/app/types";
 import { signinSuccess } from "@src/features/auth/actions";
 import { updateProfileSuccess } from "@src/features/profile/actions";
 import Header from "@src/common/components/shared/Header";
@@ -86,8 +87,8 @@ const Stock: NextPage<Props> = () => {
   const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const isNoteOpen = useSelector((state: any) => state.stocks.isNoteEditing);
-  const initialStocks = useSelector((state: any) => state.stocks.stocks);
+  const isNoteOpen = useSelector((state: States) => state.stocks.isNoteEditing);
+  const initialStocks = useSelector((state: States) => state.stocks.stocks);
   const [stocks, setStocks] = useState(
     initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content }))
   );
