@@ -1,12 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const request = (
-  options: any,
-  onSuccess: any,
-  onError: any,
-  isToken: boolean = true
-) => {
+export const createInstance = (isToken: boolean = true, options: any = {}) => {
   const baseURL =
     process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
@@ -22,11 +17,5 @@ const request = (
     initialOptions.headers = { Authorization: `Bearer ${token}` };
   }
 
-  const instance = axios.create(initialOptions);
-
-  return instance(options)
-    .then(onSuccess)
-    .catch(onError);
+  return axios.create({ ...initialOptions, ...options });
 };
-
-export default request;
