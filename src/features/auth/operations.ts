@@ -1,9 +1,9 @@
 import Router from "next/router";
 import { AnyAction } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
-import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
+import { createInstance } from "@src/utils/request";
 import { signupParams } from "./types";
 import { updateProfileSuccess } from "@src/features/profile/actions";
 import {
@@ -20,22 +20,23 @@ export const signup = (
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     dispatch(signupRequest());
-    axios
-      .post(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/auth/signup`,
-        params
-      )
-      .then(res => {
-        const profile = jwt_decode(res.data.token);
-        Cookies.set("jwt", res.data.token);
+    const request = createInstance(false);
+    request({
+      method: "post",
+      url: "/api/auth/signup/",
+      data: {
+        ...params
+      }
+    })
+      .then(({ data }) => {
+        const profile = jwt_decode(data.token);
+        Cookies.set("jwt", data.token);
         dispatch(signupSuccess());
         dispatch(updateProfileSuccess(profile));
         Router.push("/");
       })
-      .catch(err => {
-        console.log(err);
+      .catch(_err => {
         dispatch(signupFail());
-        Router.push("/");
       });
   };
 };
@@ -45,18 +46,21 @@ export const signin = (
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     dispatch(signinRequest());
-    axios
-      .post(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/auth/signin`,
-        params
-      )
-      .then(res => {
-        const profile = jwt_decode(res.data.token);
-        Cookies.set("jwt", res.data.token);
+    const request = createInstance(false);
+    request({
+      method: "post",
+      url: "/api/auth/signin/",
+      data: {
+        ...params
+      }
+    })
+      .then(({ data }) => {
+        const profile = jwt_decode(data.token);
+        Cookies.set("jwt", data.token);
         dispatch(signinSuccess());
         dispatch(updateProfileSuccess(profile));
       })
-      .catch(err => {
+      .catch(_err => {
         dispatch(signinFail());
       });
   };
