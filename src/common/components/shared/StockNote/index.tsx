@@ -37,7 +37,7 @@ const StockNote: React.FC<Props> = ({
         if (prevHeight === 0) {
           setIsInitialRendering(true);
         }
-        return scrollArea.current.clientHeight;
+        return scrollArea.current!.clientHeight;
       });
     }
     if (scrolledArea.current !== null) {

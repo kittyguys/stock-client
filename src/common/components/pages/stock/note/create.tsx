@@ -60,7 +60,7 @@ const StockNoteCreate: React.FC = () => {
     }
 
     if (source.droppableId === destination.droppableId) {
-      if (result.destination.index === result.source.index) {
+      if (result.destination?.index === result.source.index) {
         return;
       }
       const stocks = reorder(
