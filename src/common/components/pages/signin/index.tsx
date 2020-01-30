@@ -1,45 +1,56 @@
 import Router from "next/router";
-import { bindActionCreators, Dispatch } from "redux";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { withFormik, Form, Field, FormikProps } from "formik";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import BaseLogo from "@src/common/components/shared/Logo";
 import { signin } from "@src/features/auth/operations";
+import { FormValues } from "./types";
 
-type FormValues = {
-  signinID: string;
-  password: string;
-};
+const schema = yup.object().shape({
+  signinID: yup.string().required("idは必須項目です。"),
+  password: yup.string().required("パスワードは必須項目です。")
+});
 
-const InnerForm = ({ values }: FormikProps<FormValues>) => {
+const SigninForm = () => {
+  const { register, handleSubmit, errors } = useForm<FormValues>({
+    validationSchema: schema
+  });
+  const error = useSelector(({ auth }: any) => auth.error);
+  const dispatch = useDispatch();
+  const onSubmit = (values: FormValues) => {
+    dispatch(signin(values));
+  };
   return (
     <Wrapper>
       <Logo />
       <Title>ログイン</Title>
-      <Form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <FormBlock>
-          <IDInput
-            value={values.signinID}
-            type="text"
+          <Input
             name="signinID"
-            placeholder="ID または メールアドレス"
+            ref={register({ required: true })}
+            placeholder="id"
           />
         </FormBlock>
+        <Error>{errors.signinID && errors.signinID.message}</Error>
         <FormBlock>
-          <InputStyle
-            value={values.password}
-            type="password"
+          <Input
             name="password"
+            type="password"
+            ref={register}
             placeholder="パスワード"
           />
         </FormBlock>
+        <Error>{errors.password && errors.password.message}</Error>
         <FormBlock>
-          <SubmitButton type="submit" value="ログイン" />
+          <SubmitButton type="submit" value="ログイン" formNoValidate />
         </FormBlock>
+        <Error>{error.message}</Error>
         <Border>
           <Span>or</Span>
         </Border>
-      </Form>
+      </form>
       <FormBlock>
         <Button onClick={() => Router.push("/signup")}>
           アカウント作成はこちら
@@ -53,7 +64,7 @@ const Wrapper = styled.div`
   width: 360px;
   border: 1px solid #dbdbdb;
   border-radius: 10px;
-  padding: 32px 32px;
+  padding: 30px 30px;
 `;
 
 const Logo = styled(BaseLogo)`
@@ -108,7 +119,7 @@ const Button = styled.button`
   }
 `;
 
-const InputStyle = styled(Field)`
+const Input = styled.input`
   width: 100%;
   color: #555;
   font-size: 15px;
@@ -118,31 +129,6 @@ const InputStyle = styled(Field)`
   outline: none;
   background-color: #eee;
 `;
-
-const IDInput = styled(Field)`
-  width: 100%;
-  color: #555;
-  font-size: 15px;
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid #dfe1e5;
-  outline: none;
-  background-color: #eee;
-`;
-const EmailInput = {
-  color: "#555",
-  fontSize: "16px",
-  padding: "6px 10px",
-  borderRadius: "4px",
-  border: "1px solid #dfe1e5",
-  outline: "none",
-  width: "350px"
-};
-
-const LabelStyle = {
-  display: "block",
-  fontSize: "16px"
-};
 
 const Border = styled.div`
   height: 12px;
@@ -161,23 +147,9 @@ const Span = styled.span`
   top: -14px;
 `;
 
-const SigninFormFormik = withFormik({
-  mapPropsToValues: () => ({
-    signinID: "",
-    password: ""
-  }),
-  handleSubmit: (values: FormValues, { props }: any) => {
-    const { signin } = props;
-    const signinData: any = {
-      signinID: values.signinID,
-      password: values.password
-    };
-    signin(signinData);
-  }
-})(InnerForm);
+const Error = styled.span`
+  color: red;
+  font-size: 1.4rem;
+`;
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators({ signin: signin }, dispatch);
-};
-
-export default connect(null, mapDispatchToProps)(SigninFormFormik);
+export default SigninForm;

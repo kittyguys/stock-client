@@ -4,13 +4,13 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import axios from "axios";
+import { createInstance } from "@src/utils/request";
 import BaseLogo from "@src/common/components/shared/Logo";
 import { signup } from "@src/features/auth/operations";
 import { FormValues } from "./types";
 
 const schema = yup.object().shape({
-  user_name: yup.string().required("IDは必須項目です。"),
+  user_name: yup.string().required("idは必須項目です。"),
   email: yup
     .string()
     .email("形式がメールアドレスではありません。")
@@ -38,18 +38,21 @@ const SignupForm = () => {
       delete values.password_confirm;
       dispatch(signup(values));
     } else {
-      setError("user_name", "duplicated", "こちらのIDはお使いになれません。");
+      setError("user_name", "duplicated", "こちらのidはお使いになれません。");
     }
   };
   const handleChange = async (e: any) => {
     const user_name = e.target.value;
-    const result = await axios
-      .post(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/unique/username`,
-        { user_name }
-      )
-      .then(res => {
-        return res.data.isUnique;
+    const request = createInstance(false);
+    const result = await request({
+      method: "post",
+      url: "/api/unique/username/",
+      data: {
+        user_name
+      }
+    })
+      .then(({ data }) => {
+        return data.isUnique;
       })
       .catch(err => {
         console.log(err);
@@ -66,7 +69,7 @@ const SignupForm = () => {
           <Input
             name="user_name"
             ref={register({ required: true })}
-            placeholder="ID"
+            placeholder="id"
             onChange={e => {
               (async function() {
                 const result = await handleChange(e);
@@ -74,7 +77,7 @@ const SignupForm = () => {
                   setError(
                     "user_name",
                     "duplicated",
-                    "こちらのIDはお使いになれません。"
+                    "こちらのidはお使いになれません。"
                   );
                 } else {
                   clearError("user_name");

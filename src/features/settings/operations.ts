@@ -1,6 +1,6 @@
 import { AnyAction } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
-import axios from "axios";
+import { createInstance } from "@src/utils/request";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import { Data } from "./types";
@@ -14,7 +14,6 @@ export const updateProfile = (
   data: Data
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt");
     const { profile_image_url } = data;
     delete data.profile_image_url;
     dispatch(updateProfileRequest());
@@ -25,26 +24,30 @@ export const updateProfile = (
       for (let i = 0; i < entries.length; i++) {
         formData.append(entries[i][0], entries[i][1]);
       }
-      axios
-        .patch(
-          `http://${process.env.API_PATH}:${process.env.API_PORT}/api/users`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data"
-            }
-          }
-        )
-        .then(res => {
+      const request = createInstance({
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      request({
+        method: "patch",
+        url: "/api/users/",
+        data: {
+          ...formData
+        }
+      })
+        .then(({ data }) => {
           const token = Cookies.get("jwt");
-          const profile: any = jwt_decode(token);
-          const updateDiff: any = jwt_decode(res.data.token);
+          const profile = token && jwt_decode<any>(token!); // TODO
+          if (!profile) {
+            return;
+          }
+          const updateDiff: any = jwt_decode<any>(data.token); // TODO
           const newProfile = {
             ...profile,
             ...updateDiff
           };
-          Cookies.set("jwt", res.data.token);
+          Cookies.set("jwt", data.token);
           dispatch(updateProfileSuccess(newProfile));
         })
         .catch(err => {
@@ -52,25 +55,24 @@ export const updateProfile = (
           dispatch(updateProfileFail());
         });
     } else {
-      axios
-        .patch(
-          `http://${process.env.API_PATH}:${process.env.API_PORT}/api/users`,
-          data,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
-        .then(res => {
+      const request = createInstance();
+      request({
+        method: "patch",
+        url: "/api/users/",
+        data
+      })
+        .then(({ data }) => {
           const token = Cookies.get("jwt");
-          const profile: any = jwt_decode(token);
-          const updateDiff: any = jwt_decode(res.data.token);
+          const profile = token && jwt_decode<any>(token!); // TODO
+          if (!profile) {
+            return;
+          }
+          const updateDiff = jwt_decode<any>(data.token); // TODO
           const newProfile = {
             ...profile,
             ...updateDiff
           };
-          Cookies.set("jwt", res.data.token);
+          Cookies.set("jwt", data.token);
           dispatch(updateProfileSuccess(newProfile));
         })
         .catch(err => {
