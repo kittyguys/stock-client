@@ -1,21 +1,26 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const createInstance = (isToken: boolean = true, options: any = {}) => {
+type InitialOptions = {
+  baseURL: string;
+  headers: { Authorization?: string; "Content-Type"?: string };
+};
+
+export const createInstance = (options: any = {}) => {
   const baseURL =
-    process.env.NODE_ENV === "development"
+    process.env.NODE_ENV === "development" || !process.env.BASE_URL
       ? "http://localhost:8080"
       : process.env.BASE_URL;
+  const initialOptions: InitialOptions = { baseURL, ...options };
+  const token = Cookies.get("jwt");
 
-  const initialOptions: {
-    baseURL: string;
-    headers?: { Authorization: string };
-  } = { baseURL };
-
-  if (isToken) {
-    const token = Cookies.get("jwt");
-    initialOptions.headers = { Authorization: `Bearer ${token}` };
+  if (token) {
+    if (initialOptions.hasOwnProperty("headers")) {
+      initialOptions.headers.Authorization = `Bearer ${token}`;
+    } else {
+      initialOptions.headers = { Authorization: `Bearer ${token}` };
+    }
   }
 
-  return axios.create({ ...initialOptions, ...options });
+  return axios.create(initialOptions);
 };
