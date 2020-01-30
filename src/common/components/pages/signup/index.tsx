@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import axios from "axios";
+import { createInstance } from "@src/utils/request";
 import BaseLogo from "@src/common/components/shared/Logo";
 import { signup } from "@src/features/auth/operations";
 import { FormValues } from "./types";
@@ -43,13 +43,16 @@ const SignupForm = () => {
   };
   const handleChange = async (e: any) => {
     const user_name = e.target.value;
-    const result = await axios
-      .post(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/unique/username`,
-        { user_name }
-      )
-      .then(res => {
-        return res.data.isUnique;
+    const request = createInstance(false);
+    const result = await request({
+      method: "post",
+      url: "/api/unique/username/",
+      data: {
+        user_name
+      }
+    })
+      .then(({ data }) => {
+        return data.isUnique;
       })
       .catch(err => {
         console.log(err);
