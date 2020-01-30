@@ -2,7 +2,8 @@ import produce from "immer";
 import { State, AuthAction } from "./types";
 
 const InitialState: State = {
-  isSignin: false
+  isSignin: false,
+  error: { message: "" }
 };
 
 const auth = produce((state = InitialState, action: AuthAction) => {
@@ -24,6 +25,7 @@ const auth = produce((state = InitialState, action: AuthAction) => {
     }
     case "auth/signin/FAIL": {
       state.isSignin = false;
+      state.error.message = action.payload.message;
       return state;
     }
     case "auth/signout/REQUEST": {

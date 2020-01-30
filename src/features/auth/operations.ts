@@ -60,8 +60,8 @@ export const signin = (
         dispatch(signinSuccess());
         dispatch(updateProfileSuccess(profile));
       })
-      .catch(_err => {
-        dispatch(signinFail());
+      .catch(({ response }) => {
+        dispatch(signinFail({ message: response.data.errorMessage }));
       });
   };
 };
