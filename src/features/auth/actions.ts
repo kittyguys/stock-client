@@ -5,6 +5,7 @@ export const SIGNIN = "auth/signin/REQUEST";
 export const SIGNIN_SUCCESS = "auth/signin/SUCCESS";
 export const SIGNIN_FAIL = "auth/signin/FAIL";
 export const SIGNOUT = "auth/signout/REQUEST";
+import { Error } from "./types";
 
 export const signupRequest = () => ({
   type: SIGNUP
@@ -27,8 +28,9 @@ export const signinSuccess = () => ({
   type: SIGNIN_SUCCESS
 });
 
-export const signinFail = () => ({
-  type: SIGNIN_FAIL
+export const signinFail = (error: Error) => ({
+  type: SIGNIN_FAIL,
+  payload: error
 });
 
 export const signout = () => ({

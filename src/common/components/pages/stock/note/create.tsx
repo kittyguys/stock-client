@@ -57,9 +57,7 @@ const StockNoteCreate: React.FC = () => {
     const destinationStocks = getList(destination.droppableId);
 
     if (source.droppableId === destination.droppableId) {
-      // 同じカラム内で移動した時
-      if (source.index === destination.index) {
-        // 移動させようとして結局元の位置に戻った時
+      if (source.index === destination?.index) {
         return;
       }
 
