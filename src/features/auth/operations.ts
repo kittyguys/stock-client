@@ -20,7 +20,7 @@ export const signup = (
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     dispatch(signupRequest());
-    const request = createInstance(false);
+    const request = createInstance();
     request({
       method: "post",
       url: "/api/auth/signup/",
@@ -46,7 +46,7 @@ export const signin = (
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     dispatch(signinRequest());
-    const request = createInstance(false);
+    const request = createInstance();
     request({
       method: "post",
       url: "/api/auth/signin/",
