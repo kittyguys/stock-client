@@ -33,7 +33,6 @@ const Header: NextPage<Props> = ({ route }) => {
   if (isSignin === true) {
     linkContents = (
       <>
-        <Nav route={route} />
         <Icon onClick={onButtonClick}>
           <Avatar />
         </Icon>

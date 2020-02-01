@@ -24,7 +24,7 @@ import {
   createNoteAndAddStockAsync,
   reorderNoteAsync
 } from "@src/features/notes/operations";
-import Drawer from "@src/common/components/pages/stock/note/_drawer";
+import Drawer from "@src/common/components/pages/notes/_drawer";
 import { Stock } from "@src/common/components/pages/stock/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
@@ -189,7 +189,6 @@ const StockNoteCreate: React.FC = () => {
 const StockWrap = styled.div`
   display: flex;
   position: relative;
-  max-width: 1440px;
   overflow: hidden;
 `;
 

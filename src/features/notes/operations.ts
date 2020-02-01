@@ -59,8 +59,12 @@ export const getNoteAsync = (
       method: "get",
       url: `/api/notes/${id}`
     })
-      .then(res => {
-        dispatch(getNoteSuccess({ id, stocks: res.data.stocks }));
+      .then(({ data }) => {
+        const stocks = data.stocks.map((item: any) => {
+          item.id = "" + item.id;
+          return item;
+        });
+        dispatch(getNoteSuccess({ id, stocks }));
       })
       .catch(err => {
         console.log(err.message);
