@@ -6,7 +6,8 @@
     "start": "next",
     "dev": "next",
     "build": "next build",
-    "prod": "next build && next start"
+    "prod": "next build && next start",
+    "test": "jest"
   },
   "author": "",
   "repository": "https://github.com/kittyguys/stock-client",
@@ -37,6 +38,8 @@
     "yup": "^0.28.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^9.4.0",
+    "@types/jest": "^25.1.0",
     "@types/js-cookie": "^2.2.4",
     "@types/jwt-decode": "^2.2.1",
     "@types/next-redux-saga": "^3.0.2",
