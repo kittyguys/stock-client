@@ -14,7 +14,12 @@ type Props = {
 const StockList = React.memo(({ stocks, note, className }: Props) => (
   <List className={className}>
     {stocks.map((stock: Stock, index: number) => (
-      <StockCassette stock={stock} index={index} key={stock.id} note={note} />
+      <StockCassette
+        stock={stock}
+        index={index}
+        key={note ? `note_${stock.id}` : stock.id}
+        note={note}
+      />
     ))}
   </List>
 ));

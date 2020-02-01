@@ -22,7 +22,7 @@ const StockCassette: React.FC<Props> = ({
   note,
   index
 }: Props) => (
-  <Draggable draggableId={stock.id} index={index}>
+  <Draggable draggableId={note ? "note_" + stock.id : stock.id} index={index}>
     {(provided, snapshot) => {
       return (
         <Wrapper

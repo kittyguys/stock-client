@@ -1,8 +1,10 @@
 import { AnyAction } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { createInstance } from "@src/utils/request";
 import {
+  getNotesRequest,
+  getNotesSuccess,
+  getNotesFail,
   getNoteRequest,
   getNoteSuccess,
   getNoteFail,
@@ -15,29 +17,50 @@ import {
   addStockToNoteRequest,
   addStockToNoteSuccess,
   addStockToNoteFail,
+  createNoteAndAddStockRequest,
+  createNoteAndAddStockSuccess,
+  createNoteAndAddStockFail,
   reorderNoteRequest,
   reorderNoteSuccess,
   reorderNoteFail
 } from "./actions";
-import { FormData } from "./types";
+import { Stock } from "./types";
+
+export const getNotesAsync = (): ThunkAction<
+  void,
+  {},
+  undefined,
+  AnyAction
+> => {
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    dispatch(getNotesRequest());
+    const request = createInstance();
+    request({
+      method: "get",
+      url: "/api/notes"
+    })
+      .then(res => {
+        dispatch(getNotesSuccess(res.data.notes));
+      })
+      .catch(err => {
+        console.log(err.message);
+        dispatch(getNotesFail());
+      });
+  };
+};
 
 export const getNoteAsync = (
-  note_id: string
+  id: string
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(getNoteRequest());
-    axios
-      .get(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+    const request = createInstance();
+    request({
+      method: "get",
+      url: `/api/notes/${id}`
+    })
       .then(res => {
-        dispatch(getNoteSuccess(res.data));
+        dispatch(getNoteSuccess({ id, stocks: res.data.stocks }));
       })
       .catch(err => {
         console.log(err.message);
@@ -48,25 +71,22 @@ export const getNoteAsync = (
 
 export const renameNoteAsync = ({
   note_id,
-  newTitle
+  title
 }: {
   note_id: string;
-  newTitle: string;
+  title: string;
 }): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(renameNoteRequest());
-    axios
-      .patch(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}`,
-        { title: newTitle },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then(res => {
+    const request = createInstance();
+    request({
+      method: "post",
+      url: `/api/notes/${note_id}`,
+      data: {
+        title
+      }
+    })
+      .then(() => {
         dispatch(renameNoteSuccess());
       })
       .catch(err => {
@@ -80,22 +100,17 @@ export const createNoteAsync = (
   title: string
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(createNoteRequest());
-    axios
-      .post(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes`,
-        {
-          title: title
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then(res => {
-        dispatch(createNoteSuccess(res.data));
+    const request = createInstance();
+    request({
+      method: "post",
+      url: "/api/notes/",
+      data: {
+        title
+      }
+    })
+      .then(({ data }) => {
+        dispatch(createNoteSuccess(data.note));
       })
       .catch(err => {
         console.log(err.message);
@@ -106,58 +121,91 @@ export const createNoteAsync = (
 
 export const addStockToNoteAsync = ({
   note_id,
-  stock
+  stock_id
 }: {
   note_id: string;
-  stock: any;
+  stock_id: string;
 }): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(addStockToNoteRequest());
-    axios
-      .patch(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/${note_id}/stocks`,
-        {
-          stock: stock
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+    const request = createInstance();
+    request({
+      method: "post",
+      url: `/api/notes/${note_id}/stocks`,
+      data: {
+        stock_id
+      }
+    }).catch(err => {
+      console.log(err.message);
+      dispatch(addStockToNoteFail());
+    });
+  };
+};
+
+export const createNoteAndAddStockAsync = ({
+  title,
+  stock
+}: {
+  title: string;
+  stock: Stock;
+}): ThunkAction<void, {}, undefined, AnyAction> => {
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    dispatch(createNoteAndAddStockRequest(title, stock));
+    const request = createInstance();
+    request({
+      method: "post",
+      url: "/api/notes/",
+      data: {
+        title
+      }
+    })
       .then(res => {
-        const reversed = res.data.stocks.revers();
-        dispatch(addStockToNoteSuccess(reversed));
+        const note = res.data.note;
+        const stock_id = stock.id;
+        dispatch(createNoteSuccess(note));
+        request({
+          method: "post",
+          url: `/api/notes/${note.id}/stocks`,
+          data: {
+            stock_id
+          }
+        })
+          .then(() => {
+            dispatch(createNoteAndAddStockSuccess());
+          })
+          .catch(err => {
+            console.log(err.message);
+            dispatch(addStockToNoteFail());
+          });
       })
       .catch(err => {
         console.log(err.message);
-        dispatch(addStockToNoteFail());
+        dispatch(createNoteFail());
+        dispatch(createNoteAndAddStockFail());
       });
   };
 };
 
-export const reorderNoteAsync = (
-  data: any
-): ThunkAction<void, {}, undefined, AnyAction> => {
+export const reorderNoteAsync = ({
+  note_id,
+  stocks
+}: {
+  note_id: string;
+  stocks: Stock[];
+}): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
-    const stocks = data.map((item: any) => {
+    const stockIds = stocks.map((item: Stock) => {
       return item.id;
     });
-    dispatch(reorderNoteRequest());
-    axios
-      .patch(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/notes/reorder`,
-        { stocks },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then(res => {
-        dispatch(reorderNoteSuccess());
+    dispatch(reorderNoteRequest(stocks));
+    const request = createInstance();
+    request({
+      method: "patch",
+      url: `/api/notes/${note_id}/reorder`,
+      data: { stocks: stockIds }
+    })
+      .then(({ data }) => {
+        dispatch(reorderNoteSuccess(data.stocks));
       })
       .catch(err => {
         console.log(err.message);
