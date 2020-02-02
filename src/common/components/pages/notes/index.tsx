@@ -57,7 +57,6 @@ const Item = styled.li`
   border-radius: 8px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
   background-color: #fff;
-  -webkit-transition: 0.3s width;
   transition: 0.3s width;
   margin-bottom: 16px;
 `;
