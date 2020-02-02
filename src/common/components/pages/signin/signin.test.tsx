@@ -1,6 +1,6 @@
 import renderWithRedux from "@src/utils/renderWithRedux";
 import { fireEvent, queryByText } from "@testing-library/react";
-import SigninForm from "../";
+import SigninForm from "./";
 
 describe("SigninForm", () => {
   let { container } = renderWithRedux(<SigninForm />);
