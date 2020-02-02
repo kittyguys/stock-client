@@ -5,13 +5,13 @@ import jwt_decode from "jwt-decode";
 import { signinSuccess } from "@src/features/auth/actions";
 import { updateProfileSuccess } from "@src/features/profile/actions";
 import Header from "@src/common/components/shared/Header";
-import StockNoteCreate from "@src/common/components/pages/stock/note/create";
+import Notes from "@src/common/components/pages/notes";
 
 const Stock: NextPage = ({}) => {
   return (
     <>
       <Header route="/stock" />
-      <StockNoteCreate />
+      <Notes />
     </>
   );
 };

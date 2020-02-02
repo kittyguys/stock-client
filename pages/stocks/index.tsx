@@ -230,7 +230,7 @@ const Container = styled.div<{
 }>`
   width: ${({ isNoteOpen }) => (isNoteOpen ? "50%" : "100%")};
   padding: 24px 0;
-  background-color: ${Color.BlueWhite};
+  background-color: #f7f7f7;
   [data-rbd-droppable-id] {
     height: ${({ editorWrapHeight }) =>
       `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};

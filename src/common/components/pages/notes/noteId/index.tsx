@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -7,7 +8,8 @@ import {
   DropResult,
   resetServerContext
 } from "react-beautiful-dnd";
-import { reorder } from "@src/common/components/pages/stock/funcs";
+import { move, reorder } from "@src/common/components/pages/stock/funcs";
+import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
 import {
   getStocksAsync,
@@ -15,19 +17,29 @@ import {
   reorderStocksAsync
 } from "@src/features/stocks/operations";
 import { reorderStocks } from "@src/features/stocks/actions";
+import {
+  getNotesAsync,
+  getNoteAsync,
+  createNoteAsync,
+  addStockToNoteAsync,
+  createNoteAndAddStockAsync,
+  reorderNoteAsync
+} from "@src/features/notes/operations";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
 });
 
-const StockNoteCreate: React.FC = () => {
+const Notes: React.FC = () => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
   const [isSignin, setIsSignin] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const stocks = useSelector((state: any) => state.stocks.stocks);
+  const note = useSelector(({ notes }: any) => notes.note);
+  const router = useRouter();
+  const stocks = note.stocks;
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -52,7 +64,7 @@ const StockNoteCreate: React.FC = () => {
     }
   }, []);
 
-  const [editorWrapHeight, setEditorWrapHeight] = useState(121);
+  const [editorWrapHeight, setEditorWrapHeight] = useState(0);
   const editorWrap = useCallback(
     node => {
       if (node !== null) {
@@ -72,6 +84,10 @@ const StockNoteCreate: React.FC = () => {
     dispatch(createStockAsync(data));
   };
 
+  useEffect(() => {
+    dispatch(getNoteAsync("" + router.query.noteId));
+  }, []);
+
   return (
     <>
       {isSignin ? (
@@ -88,13 +104,6 @@ const StockNoteCreate: React.FC = () => {
               </Container>
             </DragDropContext>
           </StockWrap>
-          <div ref={editorWrap}>
-            <Editor
-              handleSubmit={onSubmit}
-              value={inputValue}
-              setValue={setInputValue}
-            />
-          </div>
         </>
       ) : (
         <>
@@ -108,13 +117,6 @@ const StockNoteCreate: React.FC = () => {
               />
             </Container>
           </DragDropContext>
-          <div ref={editorWrap}>
-            <Editor
-              handleSubmit={onSubmit}
-              value={inputValue}
-              setValue={setInputValue}
-            />
-          </div>
         </>
       )}
     </>
@@ -140,4 +142,4 @@ const Container = styled.div<{
   }
 `;
 
-export default StockNoteCreate;
+export default Notes;
