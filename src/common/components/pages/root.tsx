@@ -8,7 +8,6 @@ import {
   resetServerContext
 } from "react-beautiful-dnd";
 import { reorder } from "@src/common/components/pages/stock/funcs";
-import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
 import {
   getStocksAsync,

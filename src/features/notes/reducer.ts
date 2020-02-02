@@ -58,7 +58,7 @@ const notes = produce((state = initialState, action: Action) => {
       return state;
     }
     case "note/create/SUCCESS": {
-      state.notes.push(action.payload.note);
+      state.notes.unshift(action.payload.note);
       state.note = {
         ...state.note,
         ...action.payload.note
