@@ -4,6 +4,7 @@ import { State, Action } from "./types";
 const initialState: State = {
   isNoteEditing: false,
   isDrawerOpen: false,
+  isDragDisabled: true,
   stocks: []
 };
 
@@ -11,6 +12,10 @@ const stocks = produce((state = initialState, action: Action) => {
   switch (action.type) {
     case "stocks/toggleNoteComponent": {
       state.isNoteEditing = !state.isNoteEditing;
+      return state;
+    }
+    case "stocks/toggleDraggable": {
+      state.isDragDisabled = !state.isDragDisabled;
       return state;
     }
     case "stocks/toggleDrawer": {

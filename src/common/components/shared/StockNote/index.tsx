@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
+import Toggle from "react-toggle";
 import { IoIosList as BaseIconDrawerOpen } from "react-icons/io";
 import StockList from "@src/common/components/shared/StockList";
-import { toggleDrawer } from "@src/features/stocks/actions";
-import { useDispatch } from "react-redux";
+import { toggleDraggable } from "@src/features/stocks/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 type Props = {
   stocks: Stock[];
@@ -30,6 +31,9 @@ const StockNote: React.FC<Props> = ({
   const [scrollAreaHeight, setScrollAreaHeight] = useState(0);
   const [scrolledAreaHeight, setScrolledAreaHeight] = useState(0);
   const [isInitialRendering, setIsInitialRendering] = useState(false);
+  const isDragDisabled = useSelector(
+    ({ stocks }: any) => stocks.isDragDisabled
+  );
 
   useEffect(() => {
     if (scrollArea.current !== null) {
@@ -72,17 +76,14 @@ const StockNote: React.FC<Props> = ({
     }
   }, [editorWrapHeight]);
 
+  const handleBaconChange = () => {
+    dispatch(toggleDraggable());
+  };
+
   return (
     <>
       <NoteName>
-        {noteName}
-        {note && (
-          <IconDrawerOpen
-            onClick={() => dispatch(toggleDrawer())}
-            size={28}
-            color="#fff"
-          />
-        )}
+        <Toggle defaultChecked={!isDragDisabled} onChange={handleBaconChange} />
       </NoteName>
       <Droppable droppableId={noteID}>
         {provided => {
@@ -105,14 +106,13 @@ const StockNote: React.FC<Props> = ({
   );
 };
 
-const NoteName = styled.h2`
+const NoteName = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   color: #555;
   font-weight: bold;
   font-size: 2rem;
-  margin: 0 24px;
+  margin: 0 48px 16px;
+  justify-content: flex-end;
 `;
 
 const DroppableInner = styled.div`

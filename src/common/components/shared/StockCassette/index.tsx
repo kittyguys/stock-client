@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import { format } from "date-fns";
@@ -21,34 +22,43 @@ const StockCassette: React.FC<Props> = ({
   stock,
   note,
   index
-}: Props) => (
-  <Draggable draggableId={note ? "note_" + stock.id : stock.id} index={index}>
-    {(provided, snapshot) => {
-      return (
-        <Wrapper
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <Box className={className} snapshot={snapshot} note={note}>
-            <ContentHead>
-              <DateText>
-                {stock.created_at === "now"
-                  ? "now"
-                  : // TODO サーバー側で SELECT して正規の created_at を返却するようにリファクタする
-                    format(new Date(stock.created_at!), "M/d hh:mma")}
-              </DateText>
-              {/* <TimeText>更新日時: {stock.updated_at}</TimeText> */}
-            </ContentHead>
-            <Content>
-              <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
-            </Content>
-          </Box>
-        </Wrapper>
-      );
-    }}
-  </Draggable>
-);
+}: Props) => {
+  const isDragDisabled = useSelector(
+    ({ stocks }: any) => stocks.isDragDisabled
+  );
+  return (
+    <Draggable
+      draggableId={note ? "note_" + stock.id : stock.id}
+      index={index}
+      isDragDisabled={isDragDisabled}
+    >
+      {(provided, snapshot) => {
+        return (
+          <Wrapper
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <Box className={className} snapshot={snapshot} note={note}>
+              <ContentHead>
+                <DateText>
+                  {stock.created_at === "now"
+                    ? "now"
+                    : // TODO サーバー側で SELECT して正規の created_at を返却するようにリファクタする
+                      format(new Date(stock.created_at!), "M/d hh:mma")}
+                </DateText>
+                {/* <TimeText>更新日時: {stock.updated_at}</TimeText> */}
+              </ContentHead>
+              <Content>
+                <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
+              </Content>
+            </Box>
+          </Wrapper>
+        );
+      }}
+    </Draggable>
+  );
+};
 
 type BoxProps = {
   snapshot?: { isDragging: boolean };

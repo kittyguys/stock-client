@@ -1,6 +1,7 @@
 import { Stock } from "./types";
 
 export const TOGGLE_NOTE = "stocks/toggleNoteComponent";
+export const TOGGLE_DRAGGABLE = "stocks/toggleDraggable";
 export const GET_STOCKS_REQUEST = "stocks/get/REQUEST";
 export const GET_STOCKS_SUCCESS = "stocks/get/SUCCESS";
 export const GET_STOCKS_FAIL = "stocks/get/FAIL";
@@ -18,6 +19,10 @@ export const REORDER_STOCKS_FAIL = "stocks/reorder/FAIL";
 
 export const toggleNote = () => ({
   type: TOGGLE_NOTE
+});
+
+export const toggleDraggable = () => ({
+  type: TOGGLE_DRAGGABLE
 });
 
 export const toggleDrawer = () => ({

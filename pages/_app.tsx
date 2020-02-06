@@ -6,6 +6,7 @@ import jwt_decode from "jwt-decode";
 import { configureStore } from "@src/app/store";
 import { updateProfileSuccess } from "@src/features/profile/actions";
 import GlobalStyle from "@src/common/components/constants/GlobalStyle";
+import "react-toggle/style.css";
 
 interface Props {
   Component: React.Component;

@@ -81,8 +81,7 @@ const HeaderWrapper = styled.div<{ route?: string }>`
   position: relative;
   z-index: 9999;
   background-color: ${Color.White};
-  box-shadow: ${({ route }) =>
-    !(route === "common") ? "none" : "0 1px 2px rgba(0, 0, 0, 0.16)"};
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
 `;
 
 const MainInputForm = styled(BaseMainInputForm)`

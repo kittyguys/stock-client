@@ -1,6 +1,7 @@
 export type State = {
   isNoteEditing: boolean;
   isDrawerOpen: boolean;
+  isDragDisabled: boolean;
   stocks: [];
 };
 
