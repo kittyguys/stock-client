@@ -31,6 +31,7 @@ const StockNote: React.FC<Props> = ({
   const [scrollAreaHeight, setScrollAreaHeight] = useState(0);
   const [scrolledAreaHeight, setScrolledAreaHeight] = useState(0);
   const [isInitialRendering, setIsInitialRendering] = useState(false);
+  const [message, setMessage] = useState("");
   const isDragDisabled = useSelector(
     ({ stocks }: any) => stocks.isDragDisabled
   );
@@ -80,9 +81,21 @@ const StockNote: React.FC<Props> = ({
     dispatch(toggleDraggable());
   };
 
+  useEffect(() => {
+    if (isDragDisabled) {
+      setMessage("ドラッグ・アンド・ドロップで並び替えがオフです");
+    } else {
+      setMessage("ドラッグ・アンド・ドロップで並び替えがオンです");
+    }
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
+  }, [isDragDisabled]);
+
   return (
     <>
       <SwitchContainer>
+        <Message>{message}</Message>
         <Toggle defaultChecked={!isDragDisabled} onChange={handleBaconChange} />
       </SwitchContainer>
       <Droppable droppableId={noteID}>
@@ -114,6 +127,11 @@ const SwitchContainer = styled.div`
   margin: 0 16px 16px;
   justify-content: flex-end;
   padding: 0 5%;
+`;
+
+const Message = styled.span`
+  font-size: 1.6rem;
+  padding-right: 24px;
 `;
 
 const DroppableInner = styled.div`
