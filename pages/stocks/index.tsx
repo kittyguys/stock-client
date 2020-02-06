@@ -234,7 +234,6 @@ const Container = styled.div<{
   [data-rbd-droppable-id] {
     height: ${({ editorWrapHeight }) =>
       `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
-    padding: 0 24px;
     margin-top: 6px;
     overflow: auto;
   }

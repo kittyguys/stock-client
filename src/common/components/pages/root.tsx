@@ -134,9 +134,9 @@ const Container = styled.div<{
   .scrollArea {
     height: ${({ editorWrapHeight }) =>
       `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
-    padding: 0 24px;
     margin-top: 6px;
     overflow: auto;
+    padding: 0 5%;
   }
 `;
 

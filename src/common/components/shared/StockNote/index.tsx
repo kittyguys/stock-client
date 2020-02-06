@@ -82,9 +82,9 @@ const StockNote: React.FC<Props> = ({
 
   return (
     <>
-      <NoteName>
+      <SwitchContainer>
         <Toggle defaultChecked={!isDragDisabled} onChange={handleBaconChange} />
-      </NoteName>
+      </SwitchContainer>
       <Droppable droppableId={noteID}>
         {provided => {
           return (
@@ -106,13 +106,14 @@ const StockNote: React.FC<Props> = ({
   );
 };
 
-const NoteName = styled.div`
+const SwitchContainer = styled.div`
   display: flex;
   color: #555;
   font-weight: bold;
   font-size: 2rem;
-  margin: 0 48px 16px;
+  margin: 0 16px 16px;
   justify-content: flex-end;
+  padding: 0 5%;
 `;
 
 const DroppableInner = styled.div`

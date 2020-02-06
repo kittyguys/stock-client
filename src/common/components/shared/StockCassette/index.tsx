@@ -67,6 +67,7 @@ type BoxProps = {
 
 const Wrapper = styled.div`
   padding: 6px 0;
+  margin: 0 auto;
 `;
 
 const Box = styled.div<BoxProps>`
