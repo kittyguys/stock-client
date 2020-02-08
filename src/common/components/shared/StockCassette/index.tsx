@@ -1,8 +1,12 @@
-import * as React from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import { format } from "date-fns";
+import {
+  IoMdCreate as IconEdit,
+  IoMdTrash as IconRemove
+} from "react-icons/io";
 import Color from "@src/common/constants/color";
 
 type Props = {
@@ -26,6 +30,18 @@ const StockCassette: React.FC<Props> = ({
   const isDragDisabled = useSelector(
     ({ stocks }: any) => stocks.isDragDisabled
   );
+
+  const removeStock = (id: string) => {
+    // note
+    //   ? dispatch(removeStockFromNoteAsync({ id, note_id }))
+    //   : dispatch(removeStockAsync(id));
+  };
+
+  const [isEditable, setIsEditable] = useState(false);
+  const editStock = (id: string) => {
+    setIsEditable(true);
+  };
+
   return (
     <Draggable
       draggableId={note ? "note_" + stock.id : stock.id}
@@ -48,10 +64,31 @@ const StockCassette: React.FC<Props> = ({
                       format(new Date(stock.created_at!), "M/d hh:mma")}
                 </DateText>
                 {/* <TimeText>更新日時: {stock.updated_at}</TimeText> */}
+                <Buttons>
+                  <Button
+                    onClick={() => {
+                      removeStock(stock.id);
+                    }}
+                  >
+                    <IconRemove color="#6a6a6a" size={16} />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      editStock(stock.id);
+                    }}
+                  >
+                    <IconEdit color="#6a6a6a" size={16} />
+                  </Button>
+                </Buttons>
               </ContentHead>
-              <Content>
-                <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
-              </Content>
+              {isEditable ? (
+                // TODO Quill
+                <></>
+              ) : (
+                <Content>
+                  <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
+                </Content>
+              )}
             </Box>
           </Wrapper>
         );
@@ -70,6 +107,24 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
+const Buttons = styled.div`
+  display: none;
+  align-items: center;
+  margin-left: auto;
+  line-height: 1;
+`;
+
+const Button = styled.button`
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0;
+  margin-left: 4px;
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
 const Box = styled.div<BoxProps>`
   padding: 8px 12px 12px 12px;
   border-radius: 8px;
@@ -84,6 +139,10 @@ const Box = styled.div<BoxProps>`
     background-color: ${Color.HoverGray};
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.13);
     cursor: pointer;
+
+    ${Buttons} {
+      display: flex;
+    }
   }
 `;
 
@@ -107,7 +166,7 @@ const TimeText = styled.span`
 `;
 
 const Content = styled.div`
-  margin-top: 12px;
+  margin-top: 8px;
 `;
 
 const Text = styled.div`
