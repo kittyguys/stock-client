@@ -124,7 +124,7 @@ const SwitchContainer = styled.div`
   color: #555;
   font-weight: bold;
   font-size: 2rem;
-  margin: 0 16px 16px;
+  margin-bottom: 16px;
   justify-content: flex-end;
   padding: 0 5%;
 `;

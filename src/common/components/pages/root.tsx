@@ -9,6 +9,7 @@ import {
 } from "react-beautiful-dnd";
 import { reorder } from "@src/common/components/pages/stock/funcs";
 import StockNote from "@src/common/components/shared/StockNote";
+import { DeleteStockModal } from "@src/common/components/shared/Modals/deleteStock";
 import {
   getStocksAsync,
   createStockAsync,
@@ -24,10 +25,11 @@ const StockNoteCreate: React.FC = () => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
-  const [isSignin, setIsSignin] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const stocks = useSelector((state: any) => state.stocks.stocks);
+  const [stocks, isDeleteModelOpen] = useSelector(({ stocks }: any) => {
+    return [stocks.stocks, stocks.isDeleteModalOpen];
+  });
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -73,56 +75,31 @@ const StockNoteCreate: React.FC = () => {
   };
 
   return (
-    <>
-      {isSignin ? (
-        <>
-          <StockWrap>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Container editorWrapHeight={editorWrapHeight}>
-                <StockNote
-                  noteName="Your Stocks"
-                  noteID="droppable2"
-                  stocks={stocks}
-                  editorWrapHeight={editorWrapHeight}
-                />
-              </Container>
-            </DragDropContext>
-          </StockWrap>
-          <div ref={editorWrap}>
-            <Editor
-              handleSubmit={onSubmit}
-              value={inputValue}
-              setValue={setInputValue}
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Container editorWrapHeight={editorWrapHeight}>
-              <StockNote
-                noteName="Your Stocks"
-                noteID="droppable2"
-                stocks={stocks}
-                editorWrapHeight={editorWrapHeight}
-              />
-            </Container>
-          </DragDropContext>
-          <div ref={editorWrap}>
-            <Editor
-              handleSubmit={onSubmit}
-              value={inputValue}
-              setValue={setInputValue}
-            />
-          </div>
-        </>
-      )}
-    </>
+    <Root>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Container editorWrapHeight={editorWrapHeight}>
+          <StockNote
+            noteName="Your Stocks"
+            noteID="droppable2"
+            stocks={stocks}
+            editorWrapHeight={editorWrapHeight}
+          />
+        </Container>
+      </DragDropContext>
+      <div ref={editorWrap}>
+        <Editor
+          handleSubmit={onSubmit}
+          value={inputValue}
+          setValue={setInputValue}
+        />
+      </div>
+      {isDeleteModelOpen && <DeleteStockModal />}
+    </Root>
   );
 };
 
-const StockWrap = styled.div`
-  display: flex;
+const Root = styled.div`
+  position: relative;
 `;
 
 const Container = styled.div<{

@@ -2,6 +2,8 @@ export type State = {
   isNoteEditing: boolean;
   isDrawerOpen: boolean;
   isDragDisabled: boolean;
+  isDeleteModalOpen: boolean;
+  selectedStockId: string;
   stocks: [];
 };
 

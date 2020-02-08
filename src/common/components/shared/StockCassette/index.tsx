@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import { format } from "date-fns";
@@ -8,6 +8,7 @@ import {
   IoMdTrash as IconRemove
 } from "react-icons/io";
 import Color from "@src/common/constants/color";
+import { selectStock, openDeleteModal } from "@src/features/stocks/actions";
 
 type Props = {
   className?: string;
@@ -27,11 +28,14 @@ const StockCassette: React.FC<Props> = ({
   note,
   index
 }: Props) => {
+  const dispatch = useDispatch();
   const isDragDisabled = useSelector(
     ({ stocks }: any) => stocks.isDragDisabled
   );
 
   const removeStock = (id: string) => {
+    dispatch(selectStock(id));
+    dispatch(openDeleteModal());
     // note
     //   ? dispatch(removeStockFromNoteAsync({ id, note_id }))
     //   : dispatch(removeStockAsync(id));
@@ -103,6 +107,7 @@ type BoxProps = {
 };
 
 const Wrapper = styled.div`
+  position: relative;
   padding: 6px 0;
   margin: 0 auto;
 `;
@@ -126,6 +131,7 @@ const Button = styled.button`
 `;
 
 const Box = styled.div<BoxProps>`
+  position: relative;
   padding: 8px 12px 12px 12px;
   border-radius: 8px;
   box-shadow: ${({ snapshot }) =>
@@ -172,6 +178,8 @@ const Content = styled.div`
 const Text = styled.div`
   margin-top: 4px;
   font-size: 1.6rem;
+  word-wrap: break-word;
+  padding-right: 32px;
 `;
 
 export default StockCassette;
