@@ -1,4 +1,5 @@
-export type Stock = { id: string; content: string; created_at: Date | string };
+import { Stock as StockCommon } from "@src/features/stocks/types";
+export type Stock = StockCommon;
 
 export type StockLists = {
   [stocks: string]: Stock[];

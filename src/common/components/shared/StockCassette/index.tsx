@@ -1,4 +1,5 @@
-import { useState } from "react";
+import dynamic from "next/dynamic";
+import { useState, FormEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
@@ -9,6 +10,11 @@ import {
 } from "react-icons/io";
 import Color from "@src/common/constants/color";
 import { selectStock, openDeleteModal } from "@src/features/stocks/actions";
+import { updateStockAsync } from "@src/features/stocks/operations";
+
+const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
+  ssr: false
+});
 
 type Props = {
   className?: string;
@@ -17,6 +23,7 @@ type Props = {
     id: string;
     content: string;
     created_at?: Date | string;
+    updated_at?: Date | string;
   };
   note?: boolean;
   index: number;
@@ -36,19 +43,22 @@ const StockCassette: React.FC<Props> = ({
   const removeStock = (id: string) => {
     dispatch(selectStock(id));
     dispatch(openDeleteModal());
-    // note
-    //   ? dispatch(removeStockFromNoteAsync({ id, note_id }))
-    //   : dispatch(removeStockAsync(id));
   };
 
   const [isEditable, setIsEditable] = useState(false);
-  const editStock = (id: string) => {
-    setIsEditable(true);
+
+  const [inputValue, setInputValue] = useState(stock.content);
+
+  const onSubmit = (e: FormEvent) => {
+    const data = { stockId: stock.id, content: inputValue };
+    e.preventDefault();
+    setIsEditable(false);
+    dispatch(updateStockAsync(data));
   };
 
   return (
     <Draggable
-      draggableId={note ? "note_" + stock.id : stock.id}
+      draggableId={note ? "note_" + stock.id : stock.id.toString()}
       index={index}
       isDragDisabled={isDragDisabled}
     >
@@ -67,7 +77,12 @@ const StockCassette: React.FC<Props> = ({
                     : // TODO サーバー側で SELECT して正規の created_at を返却するようにリファクタする
                       format(new Date(stock.created_at!), "M/d hh:mma")}
                 </DateText>
-                {/* <TimeText>更新日時: {stock.updated_at}</TimeText> */}
+                {stock?.updated_at && stock.created_at !== stock.updated_at && (
+                  <TimeText>
+                    更新日時:{" "}
+                    {format(new Date(stock.updated_at), "M/d hh:mma")!}
+                  </TimeText>
+                )}
                 <Buttons>
                   <Button
                     onClick={() => {
@@ -78,7 +93,7 @@ const StockCassette: React.FC<Props> = ({
                   </Button>
                   <Button
                     onClick={() => {
-                      editStock(stock.id);
+                      setIsEditable(!isEditable);
                     }}
                   >
                     <IconEdit color="#6a6a6a" size={16} />
@@ -86,12 +101,20 @@ const StockCassette: React.FC<Props> = ({
                 </Buttons>
               </ContentHead>
               {isEditable ? (
-                // TODO Quill
-                <></>
+                <Editor
+                  handleSubmit={onSubmit}
+                  value={inputValue}
+                  setValue={setInputValue}
+                />
               ) : (
-                <Content>
-                  <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
-                </Content>
+                <div className="ql-snow">
+                  <Content className="markdown forStyle forStyle2">
+                    <Text
+                      className="ql-editor"
+                      dangerouslySetInnerHTML={{ __html: stock.content }}
+                    />
+                  </Content>
+                </div>
               )}
             </Box>
           </Wrapper>
@@ -110,6 +133,12 @@ const Wrapper = styled.div`
   position: relative;
   padding: 6px 0;
   margin: 0 auto;
+  form {
+    margin-top: 8px;
+    padding: 0;
+    box-shadow: none;
+    background-color: transparent;
+  }
 `;
 
 const Buttons = styled.div`
@@ -168,7 +197,7 @@ const DateText = styled.span`
 const TimeText = styled.span`
   flex-shrink: 0;
   font-size: 1.2rem;
-  margin-left: 4px;
+  margin-left: 16px;
 `;
 
 const Content = styled.div`

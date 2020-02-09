@@ -18,14 +18,13 @@ import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
 import { reorderStocks } from "@src/features/stocks/actions";
 import { getStocksAsync, addStockAsync } from "@src/features/stocks/operations";
+import { Stock } from "@src/features/stocks/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
 });
 
 type Props = {};
-
-type Stock = { id: string; content: string };
 
 // TODO 型定義を types ファイルにまとめたい
 type StockLists = {

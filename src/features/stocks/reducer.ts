@@ -1,5 +1,5 @@
 import produce from "immer";
-import { State, Action } from "./types";
+import { State, Action, Stock } from "./types";
 
 const initialState: State = {
   isNoteEditing: false,
@@ -64,6 +64,22 @@ const stocks = produce((state = initialState, action: Action) => {
       return state;
     }
     case "stocks/add/FAIL": {
+      return state;
+    }
+    case "stocks/update/REQUEST": {
+      return state;
+    }
+    case "stocks/update/SUCCESS": {
+      state.stocks = state.stocks.map((stock: Stock) => {
+        if (stock.id == action.payload.stock.id) {
+          return action.payload.stock;
+        } else {
+          return stock;
+        }
+      });
+      return state;
+    }
+    case "stocks/update/FAIL": {
       return state;
     }
     case "stocks/delete/REQUEST": {
