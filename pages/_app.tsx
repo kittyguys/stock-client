@@ -7,7 +7,7 @@ import { configureStore } from "@src/app/store";
 import { updateProfileSuccess } from "@src/features/profile/actions";
 import GlobalStyle from "@src/common/components/constants/GlobalStyle";
 import "react-toggle/style.css";
-
+import "highlight.js/styles/darcula.css";
 interface Props {
   Component: React.Component;
   store: any;

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactDomServer from "react-dom/server";
 import BaseReactQuill, { Quill } from "react-quill";
 import styled from "styled-components";
+import hljs from "highlight.js";
 import { IoMdCodeWorking, IoMdCode } from "react-icons/io";
 import Color from "@src/common/constants/color";
 import BaseMainInputForm from "@src/common/components/shared/StockInput";
@@ -15,6 +16,10 @@ icons["code-block"] = ReactDomServer.renderToString(
   <IoMdCodeWorking size="20px" />
 );
 icons["code"] = ReactDomServer.renderToString(<IoMdCode size="20px" />);
+
+hljs.configure({
+  languages: ["javascript", "ruby", "python"]
+});
 
 const modules = {
   keyboard: {
@@ -90,6 +95,9 @@ const modules = {
       { list: "ordered" },
       { list: "bullet" }
     ]
+  },
+  syntax: {
+    highlight: (text: any) => hljs.highlightAuto(text).value
   },
   markdownShortcuts: {}
 };
