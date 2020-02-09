@@ -134,7 +134,7 @@ const StockNoteCreate: React.FC = () => {
     }
   }, [notes]);
 
-  const [editorWrapHeight, setEditorWrapHeight] = useState(121);
+  const [editorWrapHeight, setEditorWrapHeight] = useState(117);
   const editorWrap = useCallback(
     node => {
       if (node !== null) {
