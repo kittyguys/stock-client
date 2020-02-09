@@ -17,7 +17,7 @@ const Nav: FC<Props> = ({ route }) => {
   switch (route) {
     case "/stock": {
       return (
-        <Link key="stocks" href="/stocks/notes/create">
+        <Link key="stocks" href="/notes/create">
           <NormalLink>ノートを作成</NormalLink>
         </Link>
       );

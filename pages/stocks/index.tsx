@@ -149,7 +149,7 @@ const Stock: NextPage<Props> = () => {
     dispatch(getStocksAsync());
   }, []);
 
-  const [editorWrapHeight, setEditorWrapHeight] = useState(121);
+  const [editorWrapHeight, setEditorWrapHeight] = useState(117);
   const editorWrap = useCallback(
     node => {
       if (node !== null) {
@@ -230,11 +230,10 @@ const Container = styled.div<{
 }>`
   width: ${({ isNoteOpen }) => (isNoteOpen ? "50%" : "100%")};
   padding: 24px 0;
-  background-color: ${Color.BlueWhite};
+  background-color: #f7f7f7;
   [data-rbd-droppable-id] {
     height: ${({ editorWrapHeight }) =>
       `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
-    padding: 0 24px;
     margin-top: 6px;
     overflow: auto;
   }

@@ -2,19 +2,37 @@ import React, { useState } from "react";
 import ReactDomServer from "react-dom/server";
 import BaseReactQuill, { Quill } from "react-quill";
 import styled from "styled-components";
+import hljs from "highlight.js";
+// @ts-ignore
+import quillEmoji from "quill-emoji";
+
 import { IoMdCodeWorking, IoMdCode } from "react-icons/io";
 import Color from "@src/common/constants/color";
 import BaseMainInputForm from "@src/common/components/shared/StockInput";
 
 // QuillEditorでMarkdownを使えるようにするモジュール
 const MarkdownShortcuts = require("quill-markdown-shortcuts");
-Quill.register("modules/markdownShortcuts", MarkdownShortcuts);
+const { EmojiBlot, ShortNameEmoji, ToolbarEmoji, TextAreaEmoji } = quillEmoji;
+Quill.register(
+  {
+    "modules/markdownShortcuts": MarkdownShortcuts,
+    "formats/emoji": EmojiBlot,
+    "modules/emoji-shortname": ShortNameEmoji,
+    "modules/emoji-toolbar": ToolbarEmoji,
+    "modules/emoji-textarea": TextAreaEmoji
+  },
+  true
+);
 
 const icons = Quill.import("ui/icons");
 icons["code-block"] = ReactDomServer.renderToString(
   <IoMdCodeWorking size="20px" />
 );
 icons["code"] = ReactDomServer.renderToString(<IoMdCode size="20px" />);
+
+hljs.configure({
+  languages: ["javascript", "ruby", "python"]
+});
 
 const modules = {
   keyboard: {
@@ -87,10 +105,17 @@ const modules = {
       "blockquote",
       "code-block",
       "code",
+      "emoji",
       { list: "ordered" },
       { list: "bullet" }
     ]
   },
+  syntax: {
+    highlight: (text: any) => hljs.highlightAuto(text).value
+  },
+  "emoji-toolbar": true,
+  "emoji-textarea": false,
+  "emoji-shortname": true,
   markdownShortcuts: {}
 };
 
@@ -107,7 +132,8 @@ const formats = [
   "link",
   "image",
   "code-block",
-  "code"
+  "code",
+  "emoji"
 ];
 
 type Props = {

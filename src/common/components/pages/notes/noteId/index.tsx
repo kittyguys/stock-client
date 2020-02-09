@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -7,29 +8,38 @@ import {
   DropResult,
   resetServerContext
 } from "react-beautiful-dnd";
-import { reorder } from "@src/common/components/pages/stock/funcs";
+import { move, reorder } from "@src/common/components/pages/stock/funcs";
+import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
-import { DeleteStockModal } from "@src/common/components/shared/Modals/deleteStock";
 import {
   getStocksAsync,
   createStockAsync,
   reorderStocksAsync
 } from "@src/features/stocks/operations";
 import { reorderStocks } from "@src/features/stocks/actions";
+import {
+  getNotesAsync,
+  getNoteAsync,
+  createNoteAsync,
+  addStockToNoteAsync,
+  createNoteAndAddStockAsync,
+  reorderNoteAsync
+} from "@src/features/notes/operations";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
 });
 
-const StockNoteCreate: React.FC = () => {
+const Notes: React.FC = () => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
+  const [isSignin, setIsSignin] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const [stocks, isDeleteModelOpen] = useSelector(({ stocks }: any) => {
-    return [stocks.stocks, stocks.isDeleteModalOpen];
-  });
+  const note = useSelector(({ notes }: any) => notes.note);
+  const router = useRouter();
+  const stocks = note.stocks;
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -54,7 +64,7 @@ const StockNoteCreate: React.FC = () => {
     }
   }, []);
 
-  const [editorWrapHeight, setEditorWrapHeight] = useState(117);
+  const [editorWrapHeight, setEditorWrapHeight] = useState(0);
   const editorWrap = useCallback(
     node => {
       if (node !== null) {
@@ -74,32 +84,47 @@ const StockNoteCreate: React.FC = () => {
     dispatch(createStockAsync(data));
   };
 
+  useEffect(() => {
+    dispatch(getNoteAsync("" + router.query.noteId));
+  }, []);
+
   return (
-    <Root>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Container editorWrapHeight={editorWrapHeight}>
-          <StockNote
-            noteName="Your Stocks"
-            noteID="droppable2"
-            stocks={stocks}
-            editorWrapHeight={editorWrapHeight}
-          />
-        </Container>
-      </DragDropContext>
-      <div ref={editorWrap}>
-        <Editor
-          handleSubmit={onSubmit}
-          value={inputValue}
-          setValue={setInputValue}
-        />
-      </div>
-      {isDeleteModelOpen && <DeleteStockModal />}
-    </Root>
+    <>
+      {isSignin ? (
+        <>
+          <StockWrap>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Container editorWrapHeight={editorWrapHeight}>
+                <StockNote
+                  noteName="Your Stocks"
+                  noteID="droppable2"
+                  stocks={stocks}
+                  editorWrapHeight={editorWrapHeight}
+                />
+              </Container>
+            </DragDropContext>
+          </StockWrap>
+        </>
+      ) : (
+        <>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Container editorWrapHeight={editorWrapHeight}>
+              <StockNote
+                noteName="Your Stocks"
+                noteID="droppable2"
+                stocks={stocks}
+                editorWrapHeight={editorWrapHeight}
+              />
+            </Container>
+          </DragDropContext>
+        </>
+      )}
+    </>
   );
 };
 
-const Root = styled.div`
-  position: relative;
+const StockWrap = styled.div`
+  display: flex;
 `;
 
 const Container = styled.div<{
@@ -117,4 +142,4 @@ const Container = styled.div<{
   }
 `;
 
-export default StockNoteCreate;
+export default Notes;

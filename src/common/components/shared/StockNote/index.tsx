@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
+import Toggle from "react-toggle";
 import { IoIosList as BaseIconDrawerOpen } from "react-icons/io";
 import StockList from "@src/common/components/shared/StockList";
-import { toggleDrawer } from "@src/features/stocks/actions";
-import { useDispatch } from "react-redux";
+import { toggleDraggable } from "@src/features/stocks/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 type Props = {
   stocks: Stock[];
@@ -30,6 +31,10 @@ const StockNote: React.FC<Props> = ({
   const [scrollAreaHeight, setScrollAreaHeight] = useState(0);
   const [scrolledAreaHeight, setScrolledAreaHeight] = useState(0);
   const [isInitialRendering, setIsInitialRendering] = useState(false);
+  const [message, setMessage] = useState("");
+  const isDragDisabled = useSelector(
+    ({ stocks }: any) => stocks.isDragDisabled
+  );
 
   useEffect(() => {
     if (scrollArea.current !== null) {
@@ -72,18 +77,27 @@ const StockNote: React.FC<Props> = ({
     }
   }, [editorWrapHeight]);
 
+  const handleBaconChange = () => {
+    dispatch(toggleDraggable());
+  };
+
+  useEffect(() => {
+    if (isDragDisabled) {
+      setMessage("ドラッグ・アンド・ドロップで並び替えがオフです");
+    } else {
+      setMessage("ドラッグ・アンド・ドロップで並び替えがオンです");
+    }
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
+  }, [isDragDisabled]);
+
   return (
     <>
-      <NoteName>
-        {noteName}
-        {note && (
-          <IconDrawerOpen
-            onClick={() => dispatch(toggleDrawer())}
-            size={28}
-            color="#fff"
-          />
-        )}
-      </NoteName>
+      <SwitchContainer>
+        <Message>{message}</Message>
+        <Toggle defaultChecked={!isDragDisabled} onChange={handleBaconChange} />
+      </SwitchContainer>
       <Droppable droppableId={noteID}>
         {provided => {
           return (
@@ -105,14 +119,19 @@ const StockNote: React.FC<Props> = ({
   );
 };
 
-const NoteName = styled.h2`
+const SwitchContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   color: #555;
   font-weight: bold;
   font-size: 2rem;
-  margin: 0 24px;
+  margin-bottom: 16px;
+  justify-content: flex-end;
+  padding: 0 5%;
+`;
+
+const Message = styled.span`
+  font-size: 1.6rem;
+  padding-right: 24px;
 `;
 
 const DroppableInner = styled.div`

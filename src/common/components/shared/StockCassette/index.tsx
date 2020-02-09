@@ -1,8 +1,14 @@
-import * as React from "react";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import { format } from "date-fns";
+import {
+  IoMdCreate as IconEdit,
+  IoMdTrash as IconRemove
+} from "react-icons/io";
 import Color from "@src/common/constants/color";
+import { selectStock, openDeleteModal } from "@src/features/stocks/actions";
 
 type Props = {
   className?: string;
@@ -21,34 +27,79 @@ const StockCassette: React.FC<Props> = ({
   stock,
   note,
   index
-}: Props) => (
-  <Draggable draggableId={stock.id} index={index}>
-    {(provided, snapshot) => {
-      return (
-        <Wrapper
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <Box className={className} snapshot={snapshot} note={note}>
-            <ContentHead>
-              <DateText>
-                {stock.created_at === "now"
-                  ? "now"
-                  : // TODO サーバー側で SELECT して正規の created_at を返却するようにリファクタする
-                    format(new Date(stock.created_at!), "M/d hh:mma")}
-              </DateText>
-              {/* <TimeText>更新日時: {stock.updated_at}</TimeText> */}
-            </ContentHead>
-            <Content>
-              <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
-            </Content>
-          </Box>
-        </Wrapper>
-      );
-    }}
-  </Draggable>
-);
+}: Props) => {
+  const dispatch = useDispatch();
+  const isDragDisabled = useSelector(
+    ({ stocks }: any) => stocks.isDragDisabled
+  );
+
+  const removeStock = (id: string) => {
+    dispatch(selectStock(id));
+    dispatch(openDeleteModal());
+    // note
+    //   ? dispatch(removeStockFromNoteAsync({ id, note_id }))
+    //   : dispatch(removeStockAsync(id));
+  };
+
+  const [isEditable, setIsEditable] = useState(false);
+  const editStock = (id: string) => {
+    setIsEditable(true);
+  };
+
+  return (
+    <Draggable
+      draggableId={note ? "note_" + stock.id : stock.id}
+      index={index}
+      isDragDisabled={isDragDisabled}
+    >
+      {(provided, snapshot) => {
+        return (
+          <Wrapper
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <Box className={className} snapshot={snapshot} note={note}>
+              <ContentHead>
+                <DateText>
+                  {stock.created_at === "now"
+                    ? "now"
+                    : // TODO サーバー側で SELECT して正規の created_at を返却するようにリファクタする
+                      format(new Date(stock.created_at!), "M/d hh:mma")}
+                </DateText>
+                {/* <TimeText>更新日時: {stock.updated_at}</TimeText> */}
+                <Buttons>
+                  <Button
+                    onClick={() => {
+                      removeStock(stock.id);
+                    }}
+                  >
+                    <IconRemove color="#6a6a6a" size={16} />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      editStock(stock.id);
+                    }}
+                  >
+                    <IconEdit color="#6a6a6a" size={16} />
+                  </Button>
+                </Buttons>
+              </ContentHead>
+              {isEditable ? (
+                // TODO Quill
+                <></>
+              ) : (
+                <Content>
+                  <Text dangerouslySetInnerHTML={{ __html: stock.content }} />
+                </Content>
+              )}
+            </Box>
+          </Wrapper>
+        );
+      }}
+    </Draggable>
+  );
+};
 
 type BoxProps = {
   snapshot?: { isDragging: boolean };
@@ -56,10 +107,31 @@ type BoxProps = {
 };
 
 const Wrapper = styled.div`
+  position: relative;
   padding: 6px 0;
+  margin: 0 auto;
+`;
+
+const Buttons = styled.div`
+  display: none;
+  align-items: center;
+  margin-left: auto;
+  line-height: 1;
+`;
+
+const Button = styled.button`
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0;
+  margin-left: 4px;
+  :hover {
+    opacity: 0.7;
+  }
 `;
 
 const Box = styled.div<BoxProps>`
+  position: relative;
   padding: 8px 12px 12px 12px;
   border-radius: 8px;
   box-shadow: ${({ snapshot }) =>
@@ -73,6 +145,10 @@ const Box = styled.div<BoxProps>`
     background-color: ${Color.HoverGray};
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.13);
     cursor: pointer;
+
+    ${Buttons} {
+      display: flex;
+    }
   }
 `;
 
@@ -96,12 +172,14 @@ const TimeText = styled.span`
 `;
 
 const Content = styled.div`
-  margin-top: 12px;
+  margin-top: 8px;
 `;
 
 const Text = styled.div`
   margin-top: 4px;
   font-size: 1.6rem;
+  word-wrap: break-word;
+  padding-right: 32px;
 `;
 
 export default StockCassette;

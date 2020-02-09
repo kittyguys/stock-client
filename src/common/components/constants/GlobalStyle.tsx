@@ -123,6 +123,12 @@ Twitter: @rich_clark
   a, button, input[type="submit"] {
     cursor: pointer;
   }
+
+  #emoji-palette {
+    top: -304px !important;
+    height: 260px;
+    background-color: #ffffff;
+  }
 `;
 
 export default GlobalStyle;
