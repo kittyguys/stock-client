@@ -205,6 +205,12 @@ Twitter: @rich_clark
       white-space: nowrap;
     }
   }
+  
+  #emoji-palette {
+    top: -304px !important;
+    height: 260px;
+    background-color: #ffffff;
+  }
 `;
 
 export default GlobalStyle;
