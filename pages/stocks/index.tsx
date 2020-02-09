@@ -78,7 +78,7 @@ const move = (
   return result;
 };
 
-const Stock: NextPage<Props> = () => {
+const Stocks: NextPage<Props> = () => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
@@ -208,7 +208,7 @@ const Stock: NextPage<Props> = () => {
   );
 };
 
-Stock.getInitialProps = async (ctx: any) => {
+Stocks.getInitialProps = async (ctx: any) => {
   const allCookies = cookies(ctx);
   const token = allCookies.jwt;
   if (typeof token === "string") {
@@ -242,4 +242,4 @@ const NoteContainer = styled(Container)`
   background-color: ${Color.Brand[500]};
 `;
 
-export default Stock;
+export default Stocks;
