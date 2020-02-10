@@ -71,7 +71,7 @@ const stocks = produce((state = initialState, action: Action) => {
     }
     case "stocks/update/SUCCESS": {
       state.stocks = state.stocks.map((stock: Stock) => {
-        if (stock.id == action.payload.stock.id) {
+        if ("" + stock.id === "" + action.payload.stock.id) {
           return action.payload.stock;
         } else {
           return stock;
