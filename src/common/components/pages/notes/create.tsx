@@ -174,9 +174,6 @@ const StockNoteCreate: React.FC = () => {
       </StockWrap>
       <div ref={editorWrap}>
         <Editor
-          onClickSubmit={e => {
-            e.preventDefault();
-          }}
           handleSubmit={e => e.preventDefault}
           value={inputValue}
           setValue={setInputValue}

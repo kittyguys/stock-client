@@ -11,6 +11,9 @@ import {
   addStockRequest,
   addStockSuccess,
   addStockFail,
+  updateStockRequest,
+  updateStockSuccess,
+  updateStockFail,
   deleteStockRequest,
   deleteStockSuccess,
   deleteStockFail,
@@ -86,6 +89,29 @@ export const addStockAsync = (
       .catch(err => {
         console.log(err.message);
         dispatch(addStockFail());
+      });
+  };
+};
+
+export const updateStockAsync = (
+  data: FormData
+): ThunkAction<void, {}, undefined, AnyAction> => {
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    dispatch(updateStockRequest());
+    const request = createInstance();
+    request({
+      method: "patch",
+      url: "/api/stocks/",
+      data: {
+        ...data
+      }
+    })
+      .then(({ data }) => {
+        dispatch(updateStockSuccess(data.stock));
+      })
+      .catch(err => {
+        console.log(err.message);
+        dispatch(updateStockFail());
       });
   };
 };
