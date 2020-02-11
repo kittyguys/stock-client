@@ -2,13 +2,27 @@ import React, { useState } from "react";
 import ReactDomServer from "react-dom/server";
 import BaseReactQuill, { Quill } from "react-quill";
 import styled from "styled-components";
+import hljs from "highlight.js";
+// @ts-ignore
+import quillEmoji from "quill-emoji";
+
 import { IoMdCodeWorking, IoMdCode } from "react-icons/io";
 import Color from "@src/common/constants/color";
 import BaseMainInputForm from "@src/common/components/shared/StockInput";
 
 // QuillEditorでMarkdownを使えるようにするモジュール
 const MarkdownShortcuts = require("quill-markdown-shortcuts");
-Quill.register("modules/markdownShortcuts", MarkdownShortcuts);
+const { EmojiBlot, ShortNameEmoji, ToolbarEmoji, TextAreaEmoji } = quillEmoji;
+Quill.register(
+  {
+    "modules/markdownShortcuts": MarkdownShortcuts,
+    "formats/emoji": EmojiBlot,
+    "modules/emoji-shortname": ShortNameEmoji,
+    "modules/emoji-toolbar": ToolbarEmoji,
+    "modules/emoji-textarea": TextAreaEmoji
+  },
+  true
+);
 
 const icons = Quill.import("ui/icons");
 icons["code-block"] = ReactDomServer.renderToString(
@@ -16,56 +30,65 @@ icons["code-block"] = ReactDomServer.renderToString(
 );
 icons["code"] = ReactDomServer.renderToString(<IoMdCode size="20px" />);
 
+hljs.configure({
+  languages: ["javascript", "ruby", "python"]
+});
+
 const modules = {
   keyboard: {
     bindings: {
       exitCode: {
         format: ["code"],
-        key: 39, // →キー
-        handler: function(_range: any, context: any) {
-          if (context.suffix !== "") {
-            return true;
-          }
-          this.quill.format("code", false);
-          const cursorPosition = this.quill.getSelection().index;
-          if (
-            /./.test(this.quill.getText(cursorPosition, cursorPosition + 2))
-          ) {
-            return true;
-          }
-          this.quill.insertText(cursorPosition, " ");
+        key: 39, // Arrow right key
+        handler: function(this: { quill: Quill }, _range: any, context: any) {
+          const quill = this.quill;
+          if (!quill.getSelection()) return; // for strict mode
+
+          // code の中でカーソル位置が右端じゃなければ、通常の→キーを押した挙動
+          if (context.suffix !== "") return true;
+
+          quill.format("code", false);
+          const cursorPosition = quill.getSelection()!.index;
+          const isExistChars = /./.test(
+            quill.getText(cursorPosition, cursorPosition + 2)
+          );
+          if (isExistChars) return true;
+
+          // code の右端で→キーを押したら半角スペースを挿入する
+          quill.insertText(cursorPosition, " ");
         }
       },
       exitCodeBlockUpward: {
         format: ["code-block"],
-        key: 38, // ↑キー
-        handler: function(_range: any, context: any) {
+        key: 38, // Arrow up key
+        handler: function(this: { quill: any }, _range: any, context: any) {
+          const quill = this.quill;
           if (!/^(|\n)$/.test(context.prefix)) {
             return true;
           }
-          const cursorPosition = this.quill.getSelection().index;
+          const cursorPosition = quill.getSelection().index;
           if (cursorPosition === 0) {
-            this.quill.setContents([
-              { insert: "\n" },
-              ...this.quill.getContents().ops
-            ]);
+            quill.setContents([{ insert: "\n" }, ...quill.getContents().ops]);
           }
           return true;
         }
       },
       exitCodeBlockDownward: {
         format: ["code-block"],
-        key: 40, // ↓キー
-        handler: function(_range: any, context: any) {
+        key: 40, // Arrow down key
+        handler: function(this: { quill: Quill }, _range: any, context: any) {
+          const quill = this.quill;
+          if (!quill.getSelection()) return; // for strict mode
+
           if (!/^(|\n)$/.test(context.suffix)) {
             return true;
           }
-          const cursorPosition = this.quill.getSelection().index;
+          const cursorPosition = quill.getSelection()!.index;
           if (
-            this.quill.getLine(cursorPosition + 1)[0].statics.name ===
+            quill.getLine(cursorPosition + 1)[0].statics.name ===
             "SyntaxCodeBlock"
           ) {
-            this.quill.insertText(cursorPosition + 1, "\n");
+            quill.insertText(cursorPosition + 1, "\n");
           }
           return true;
         }
@@ -82,10 +105,17 @@ const modules = {
       "blockquote",
       "code-block",
       "code",
+      "emoji",
       { list: "ordered" },
       { list: "bullet" }
     ]
   },
+  syntax: {
+    highlight: (text: any) => hljs.highlightAuto(text).value
+  },
+  "emoji-toolbar": true,
+  "emoji-textarea": false,
+  "emoji-shortname": true,
   markdownShortcuts: {}
 };
 
@@ -102,7 +132,8 @@ const formats = [
   "link",
   "image",
   "code-block",
-  "code"
+  "code",
+  "emoji"
 ];
 
 type Props = {
@@ -137,6 +168,7 @@ const Editor: React.FC<Props> = ({
   return (
     <MainInputForm handleSubmit={handleSubmit}>
       <ReactQuill
+        className="markdown forStyle forStyle2"
         value={value}
         onChange={handleChange}
         modules={modules}
@@ -195,86 +227,6 @@ const SubmitButton = styled.button`
 const ReactQuill = styled(BaseReactQuill)`
   width: 100%;
   height: 100%;
-  .ql-toolbar {
-    background-color: #eee;
-    border-radius: 4px 4px 0 0;
-  }
-  .ql-container {
-    border-radius: 0 0 4px 4px;
-    padding: 12px 16px;
-    font: inherit;
-  }
-  .ql-editor {
-    background: none;
-    padding: 0;
-    max-height: 24rem;
-    font-size: 1.3rem;
-    strong {
-      font-weight: bold;
-    }
-    blockquote {
-      position: relative;
-      padding-left: 16px;
-    }
-    em {
-      font-style: italic;
-    }
-    ul {
-      padding-left: 0;
-    }
-    ol {
-      counter-reset: item;
-      list-style-type: none;
-      padding-left: 0;
-      li {
-        ::before {
-          counter-increment: item;
-          content: counters(item);
-          font-weight: bold;
-        }
-      }
-    }
-  }
-  .ql-snow {
-    code {
-      padding: 2px;
-      font-family: MeiryoKe_Gothic, "Ricty Diminished", "Osaka－等幅",
-        "Osaka-等幅", Osaka-mono, "ＭＳ ゴシック", "MS Gothic", SFMono-Regular,
-        "Courier New", Courier, Monaco, Menlo, Consolas, "Lucida Console",
-        monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
-      font-size: 1.2rem;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      word-break: normal;
-      tab-size: 4;
-      color: rgb(224, 30, 90);
-      border: solid 1px #d8d6d6;
-    }
-    pre.ql-syntax {
-      font-family: MeiryoKe_Gothic, "Ricty Diminished", "Osaka－等幅",
-        "Osaka-等幅", Osaka-mono, "ＭＳ ゴシック", "MS Gothic", SFMono-Regular,
-        "Courier New", Courier, Monaco, Menlo, Consolas, "Lucida Console",
-        monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
-      padding: 8px;
-      border: solid 1px #d8d6d6;
-      border-radius: 3px;
-      background-color: rgba(29, 28, 29, 0.06);
-      color: #000;
-    }
-    .ql-picker-options {
-      background-color: #fff;
-      min-width: 100%;
-      display: none;
-      padding: 4px 8px;
-      position: absolute;
-      top: 0;
-      transform: translate(0, -100%);
-      white-space: nowrap;
-    }
-  }
 `;
 
 export default Editor;

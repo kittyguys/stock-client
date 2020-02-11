@@ -19,14 +19,13 @@ import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
 import { reorderStocks } from "@src/features/stocks/actions";
 import { getStocksAsync, addStockAsync } from "@src/features/stocks/operations";
+import { Stock } from "@src/features/stocks/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
 });
 
 type Props = {};
-
-type Stock = { id: string; content: string };
 
 // TODO 型定義を types ファイルにまとめたい
 type StockLists = {
@@ -80,7 +79,7 @@ const move = (
   return result;
 };
 
-const Stock: NextPage<Props> = () => {
+const Stocks: NextPage<Props> = () => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
@@ -150,7 +149,7 @@ const Stock: NextPage<Props> = () => {
     dispatch(getStocksAsync());
   }, []);
 
-  const [editorWrapHeight, setEditorWrapHeight] = useState(121);
+  const [editorWrapHeight, setEditorWrapHeight] = useState(117);
   const editorWrap = useCallback(
     node => {
       if (node !== null) {
@@ -210,7 +209,7 @@ const Stock: NextPage<Props> = () => {
   );
 };
 
-Stock.getInitialProps = async (ctx: any) => {
+Stocks.getInitialProps = async (ctx: any) => {
   const allCookies = cookies(ctx);
   const token = allCookies.jwt;
   if (typeof token === "string") {
@@ -231,11 +230,10 @@ const Container = styled.div<{
 }>`
   width: ${({ isNoteOpen }) => (isNoteOpen ? "50%" : "100%")};
   padding: 24px 0;
-  background-color: ${Color.BlueWhite};
+  background-color: #f7f7f7;
   [data-rbd-droppable-id] {
     height: ${({ editorWrapHeight }) =>
       `calc(100vh - ${editorWrapHeight}px - 84px - 84px)`};
-    padding: 0 24px;
     margin-top: 6px;
     overflow: auto;
   }
@@ -245,4 +243,4 @@ const NoteContainer = styled(Container)`
   background-color: ${Color.Brand[500]};
 `;
 
-export default Stock;
+export default Stocks;

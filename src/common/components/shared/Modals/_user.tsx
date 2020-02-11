@@ -37,6 +37,11 @@ const UserModal: FC<Props> = () => {
         </ProfileButton>
       </Block>
       <Block>
+        <ProfileButton onClick={() => handleRoute("notes")}>
+          ノート
+        </ProfileButton>
+      </Block>
+      <Block>
         <ProfileButton onClick={() => handleRoute("settings/profile")}>
           設定
         </ProfileButton>

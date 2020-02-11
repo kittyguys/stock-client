@@ -123,6 +123,94 @@ Twitter: @rich_clark
   a, button, input[type="submit"] {
     cursor: pointer;
   }
+
+  /* MarkDown */
+  .ql-toolbar {
+    background-color: #eee;
+    border-radius: 4px 4px 0 0;
+  }
+  .ql-container {
+    border-radius: 0 0 4px 4px;
+    padding: 12px 16px;
+    font: inherit;
+  }
+  .markdown.forStyle.forStyle2 {
+    .ql-editor {
+      background: none;
+      padding: 0;
+      max-height: 24rem;
+      font-size: 1.3rem;
+    }
+    strong {
+      font-weight: bold;
+    }
+    blockquote {
+      position: relative;
+      padding-left: 16px;
+    }
+    em {
+      font-style: italic;
+    }
+    ul {
+      padding-left: 0;
+    }
+    ol {
+      counter-reset: item;
+      list-style-type: none;
+      padding-left: 0;
+      li {
+        ::before {
+          counter-increment: item;
+          content: counters(item);
+          font-weight: bold;
+        }
+      }
+    }
+    code {
+      padding: 2px;
+      font-family: MeiryoKe_Gothic, "Ricty Diminished", "Osaka－等幅",
+        "Osaka-等幅", Osaka-mono, "ＭＳ ゴシック", "MS Gothic", SFMono-Regular,
+        "Courier New", Courier, Monaco, Menlo, Consolas, "Lucida Console",
+        monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+      font-size: 1.2rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      word-break: normal;
+      tab-size: 4;
+      color: rgb(224, 30, 90);
+      border: solid 1px #d8d6d6;
+    }
+    pre {
+      font-family: MeiryoKe_Gothic, "Ricty Diminished", "Osaka－等幅",
+        "Osaka-等幅", Osaka-mono, "ＭＳ ゴシック", "MS Gothic", SFMono-Regular,
+        "Courier New", Courier, Monaco, Menlo, Consolas, "Lucida Console",
+        monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+      padding: 8px;
+      border: solid 1px #d8d6d6;
+      border-radius: 3px;
+      background-color: rgba(29, 28, 29, 0.06);
+      color: #000;
+    }
+    .ql-picker-options {
+      background-color: #fff;
+      min-width: 100%;
+      display: none;
+      padding: 4px 8px;
+      position: absolute;
+      top: 0;
+      transform: translate(0, -100%);
+      white-space: nowrap;
+    }
+  }
+  
+  #emoji-palette {
+    top: -304px !important;
+    height: 260px;
+    background-color: #ffffff;
+  }
 `;
 
 export default GlobalStyle;

@@ -20,7 +20,7 @@ const LogoWrapper = styled.div`
 `;
 
 const Text = styled.span`
-  font-family: "Lato", cursive;
+  font-family: "Lato", sans-serif;
   color: ${Color.Black.default};
 `;
 

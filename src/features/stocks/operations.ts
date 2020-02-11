@@ -1,7 +1,6 @@
 import { AnyAction } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { createInstance } from "@src/utils/request";
 import {
   getStocksRequest,
   getStocksSuccess,
@@ -12,6 +11,12 @@ import {
   addStockRequest,
   addStockSuccess,
   addStockFail,
+  updateStockRequest,
+  updateStockSuccess,
+  updateStockFail,
+  deleteStockRequest,
+  deleteStockSuccess,
+  deleteStockFail,
   reorderStocksRequest,
   reorderStocksSuccess,
   reorderStocksFail
@@ -25,19 +30,14 @@ export const getStocksAsync = (): ThunkAction<
   AnyAction
 > => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(getStocksRequest());
-    axios
-      .get(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/stocks`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then(res => {
-        const reversed = res.data.stocks.reverse();
+    const request = createInstance();
+    request({
+      method: "get",
+      url: "/api/stocks/"
+    })
+      .then(({ data }) => {
+        const reversed = data.stocks.reverse();
         dispatch(getStocksSuccess(reversed));
       })
       .catch(err => {
@@ -51,20 +51,17 @@ export const createStockAsync = (
   data: FormData
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(createStockRequest());
-    axios
-      .post(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/stocks`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then(res => {
-        dispatch(createStockSuccess(res.data.stock));
+    const request = createInstance();
+    request({
+      method: "post",
+      url: "/api/stocks/",
+      data: {
+        ...data
+      }
+    })
+      .then(({ data }) => {
+        dispatch(createStockSuccess(data.stock));
       })
       .catch(err => {
         console.log(err.message);
@@ -77,20 +74,17 @@ export const addStockAsync = (
   data: FormData
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     dispatch(addStockRequest());
-    axios
-      .patch(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/stocks`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then(res => {
-        dispatch(addStockSuccess(res.data.stock));
+    const request = createInstance();
+    request({
+      method: "patch",
+      url: "/api/stocks/",
+      data: {
+        ...data
+      }
+    })
+      .then(({ data }) => {
+        dispatch(addStockSuccess(data.stock));
       })
       .catch(err => {
         console.log(err.message);
@@ -99,26 +93,69 @@ export const addStockAsync = (
   };
 };
 
+export const updateStockAsync = (
+  data: FormData
+): ThunkAction<void, {}, undefined, AnyAction> => {
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    dispatch(updateStockRequest());
+    const request = createInstance();
+    request({
+      method: "patch",
+      url: "/api/stocks/",
+      data: {
+        ...data
+      }
+    })
+      .then(({ data }) => {
+        dispatch(updateStockSuccess(data.stock));
+      })
+      .catch(err => {
+        console.log(err.message);
+        dispatch(updateStockFail());
+      });
+  };
+};
+
+export const deleteStockAsync = (
+  stockId: any
+): ThunkAction<void, {}, undefined, AnyAction> => {
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    dispatch(deleteStockRequest());
+    const request = createInstance();
+    request({
+      method: "delete",
+      url: "/api/stocks/",
+      data: {
+        stockId
+      }
+    })
+      .then(({ data }) => {
+        dispatch(deleteStockSuccess(data.stockId));
+      })
+      .catch(err => {
+        console.log(err.message);
+        dispatch(deleteStockFail());
+      });
+  };
+};
+
 export const reorderStocksAsync = (
   data: any
 ): ThunkAction<void, {}, undefined, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    const token = Cookies.get("jwt"); // TODO: 有効期限をチェック
     const stocks = data.map((item: any) => {
       return item.id;
     });
     dispatch(reorderStocksRequest());
-    axios
-      .patch(
-        `http://${process.env.API_PATH}:${process.env.API_PORT}/api/stocks/reorder`,
-        { stocks },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then(res => {
+    const request = createInstance();
+    request({
+      method: "patch",
+      url: "/api/stocks/reorder",
+      data: {
+        stocks
+      }
+    })
+      .then(_res => {
         dispatch(reorderStocksSuccess());
       })
       .catch(err => {

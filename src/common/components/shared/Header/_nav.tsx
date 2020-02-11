@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { toggleNote } from "@src/features/stocks/actions";
 
 type Props = {
-  route: string;
+  route?: string;
 };
 
 const Nav: FC<Props> = ({ route }) => {
@@ -17,7 +17,7 @@ const Nav: FC<Props> = ({ route }) => {
   switch (route) {
     case "/stock": {
       return (
-        <Link key="stocks" href="/stocks/notes/create">
+        <Link key="stocks" href="/notes/create">
           <NormalLink>ノートを作成</NormalLink>
         </Link>
       );
