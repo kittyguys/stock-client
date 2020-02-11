@@ -5,10 +5,12 @@ import { useForm } from "react-hook-form";
 import { updatedDiff } from "deep-object-diff";
 import BaseAvatar from "@src/common/components/shared/Avatar";
 import { updateProfile } from "@src/features/settings/operations";
+import { States } from "@src/app/types";
+import { State } from "@src/features/profile/types";
 
 const ProfileEditor = () => {
   const dispatch = useDispatch();
-  const profile = useSelector((state: any) => state.profile);
+  const profile = useSelector<States, State>(({ profile }) => profile);
   const [imgURL, setImgURL] = useState<string | undefined>(undefined);
   const { register, handleSubmit, errors } = useForm();
   const formData: any = {

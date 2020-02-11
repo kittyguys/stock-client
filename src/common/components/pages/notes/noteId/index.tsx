@@ -25,6 +25,8 @@ import {
   createNoteAndAddStockAsync,
   reorderNoteAsync
 } from "@src/features/notes/operations";
+import { States } from "@src/app/types";
+import { State } from "@src/features/notes/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -37,7 +39,7 @@ const Notes: React.FC = () => {
   const [isSignin, setIsSignin] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const note = useSelector(({ notes }: any) => notes.note);
+  const note = useSelector<States, State["note"]>(({ notes }) => notes.note);
   const router = useRouter();
   const stocks = note.stocks;
 

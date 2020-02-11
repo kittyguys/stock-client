@@ -3,10 +3,12 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { getNotesAsync, createNoteAsync } from "@src/features/notes/operations";
+import { States } from "@src/app/types";
+import { State } from "@src/features/notes/types";
 
 const Notes: React.FC = () => {
   const dispatch = useDispatch();
-  const notes = useSelector(({ notes }: any) => notes.notes);
+  const notes = useSelector<States, State["notes"]>(({ notes }) => notes.notes);
 
   const noteList = notes.map((item: any) => {
     return (

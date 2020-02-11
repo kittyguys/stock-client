@@ -16,6 +16,8 @@ import {
   reorderStocksAsync
 } from "@src/features/stocks/operations";
 import { reorderStocks } from "@src/features/stocks/actions";
+import { States } from "@src/app/types";
+import { State } from "@src/features/stocks/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -27,9 +29,12 @@ const StockNoteCreate: React.FC = () => {
 
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const [stocks, isDeleteModelOpen] = useSelector(({ stocks }: any) => {
-    return [stocks.stocks, stocks.isDeleteModalOpen];
-  });
+  const stocks = useSelector<States, State["stocks"]>(
+    ({ stocks }) => stocks.stocks
+  );
+  const isDeleteModelOpen = useSelector<States, State["isDeleteModalOpen"]>(
+    ({ stocks }) => stocks.isDeleteModalOpen
+  );
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;

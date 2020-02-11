@@ -13,13 +13,17 @@ import { useSelector } from "react-redux";
 import Nav from "./_nav";
 import { UserModal } from "@src/common/components/shared/Modals";
 import Color from "@src/common/constants/color";
+import { States } from "@src/app/types";
+import { State } from "@src/features/auth/types";
 
 type Props = {
   route?: string;
 };
 
 const Header: NextPage<Props> = ({ route }) => {
-  const isSignin = useSelector((state: any) => state.auth.isSignin);
+  const isSignin = useSelector<States, State["isSignin"]>(
+    ({ auth }) => auth.isSignin
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toHome = () => {
     Router.push("/");

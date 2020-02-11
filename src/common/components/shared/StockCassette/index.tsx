@@ -11,6 +11,8 @@ import {
 import Color from "@src/common/constants/color";
 import { selectStock, openDeleteModal } from "@src/features/stocks/actions";
 import { updateStockAsync } from "@src/features/stocks/operations";
+import { States } from "@src/app/types";
+import { State } from "@src/features/stocks/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -36,8 +38,8 @@ const StockCassette: React.FC<Props> = ({
   index
 }: Props) => {
   const dispatch = useDispatch();
-  const isDragDisabled = useSelector(
-    ({ stocks }: any) => stocks.isDragDisabled
+  const isDragDisabled = useSelector<States, State["isDragDisabled"]>(
+    ({ stocks }) => stocks.isDragDisabled
   );
 
   const removeStock = (id: string) => {
