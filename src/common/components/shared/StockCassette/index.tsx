@@ -12,7 +12,7 @@ import Color from "@src/common/constants/color";
 import { selectStock, openDeleteModal } from "@src/features/stocks/actions";
 import { updateStockAsync } from "@src/features/stocks/operations";
 import { States } from "@src/app/types";
-import { State } from "@src/features/stocks/types";
+import { State, Stock } from "@src/features/stocks/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -21,12 +21,7 @@ const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
 type Props = {
   className?: string;
   // TODO 型定義を types ファイルにまとめたい
-  stock: {
-    id: string;
-    content: string;
-    created_at?: Date | string;
-    updated_at?: Date | string;
-  };
+  stock: Stock;
   note?: boolean;
   index: number;
 };

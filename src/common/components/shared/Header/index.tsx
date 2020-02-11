@@ -1,8 +1,6 @@
-import { NextPage } from "next";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import Router from "next/router";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
@@ -20,14 +18,11 @@ type Props = {
   route?: string;
 };
 
-const Header: NextPage<Props> = ({ route }) => {
+const Header: React.FC<Props> = ({ route }) => {
   const isSignin = useSelector<States, State["isSignin"]>(
     ({ auth }) => auth.isSignin
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const toHome = () => {
-    Router.push("/");
-  };
 
   const onButtonClick = () => {
     setIsModalOpen(!isModalOpen);

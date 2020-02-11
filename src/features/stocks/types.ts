@@ -4,7 +4,7 @@ export type State = {
   isDragDisabled: boolean;
   isDeleteModalOpen: boolean;
   selectedStockId: string;
-  stocks: [];
+  stocks: Stock[];
 };
 
 export type Action = {

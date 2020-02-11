@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
@@ -79,7 +79,7 @@ const Notes: React.FC = () => {
     [inputValue]
   );
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     const data = { content: inputValue };
     e.preventDefault();
     setInputValue("");
