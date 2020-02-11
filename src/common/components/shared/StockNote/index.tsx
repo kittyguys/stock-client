@@ -123,9 +123,9 @@ const SwitchContainer = styled.div`
   color: #555;
   font-weight: bold;
   font-size: 2rem;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   justify-content: flex-end;
-  padding: 0 5%;
+  padding: 0 6% 0 5%;
 `;
 
 const Message = styled.span`
@@ -134,7 +134,7 @@ const Message = styled.span`
 `;
 
 const DroppableInner = styled.div`
-  height: 100%;
+  min-height: 100%;
 `;
 
 const IconDrawerOpen = styled(BaseIconDrawerOpen)`
