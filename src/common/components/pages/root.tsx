@@ -12,10 +12,10 @@ import StockNote from "@src/common/components/shared/StockNote";
 import { DeleteStockModal } from "@src/common/components/shared/Modals/deleteStock";
 import {
   getStocksAsync,
-  createStockAsync,
   reorderStocksAsync
 } from "@src/features/stocks/operations";
 import { reorderStocks } from "@src/features/stocks/actions";
+import { createStockAsync } from "@src/common/components/operations/stock/createStockAsync";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -71,7 +71,7 @@ const StockNoteCreate: React.FC = () => {
     const data = { content: inputValue };
     e.preventDefault();
     setInputValue("");
-    dispatch(createStockAsync(data));
+    createStockAsync(dispatch, data);
   };
 
   return (
