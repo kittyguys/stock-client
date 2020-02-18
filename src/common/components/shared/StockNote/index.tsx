@@ -97,26 +97,39 @@ const StockNote: React.FC<Props> = ({
         <Message>{message}</Message>
         <Toggle defaultChecked={!isDragDisabled} onChange={handleBaconChange} />
       </SwitchContainer>
-      <Droppable droppableId={noteID}>
-        {provided => {
-          return (
-            <div className="scrollArea" ref={scrollArea}>
-              <DroppableInner
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                <div ref={scrolledArea}>
-                  <StockList stocks={stocks} note={note} />
-                  {provided.placeholder}
-                </div>
-              </DroppableInner>
-            </div>
-          );
-        }}
-      </Droppable>
+      {stocks.length === 0 ? (
+        <div className="scrollArea" ref={scrollArea}>
+          <EmptyMessage>
+            メモがありません！下の入力フォームからメモを送信してみましょう！
+          </EmptyMessage>
+        </div>
+      ) : (
+        <Droppable droppableId={noteID}>
+          {provided => {
+            return (
+              <div className="scrollArea" ref={scrollArea}>
+                <DroppableInner
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  <div ref={scrolledArea}>
+                    <StockList stocks={stocks} note={note} />
+                    {provided.placeholder}
+                  </div>
+                </DroppableInner>
+              </div>
+            );
+          }}
+        </Droppable>
+      )}
     </>
   );
 };
+
+const EmptyMessage = styled.span`
+  font-size: 2rem;
+  font-weight: bold;
+`;
 
 const SwitchContainer = styled.div`
   display: flex;
