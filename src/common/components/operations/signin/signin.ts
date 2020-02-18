@@ -12,7 +12,7 @@ import { FormValues } from "@src/common/components/pages/signin/types";
 
 export const signin = (dispatch: Dispatch<any>, values: FormValues) => {
   dispatch(signinRequest());
-  client
+  client()
     .post("/api/auth/signin/", {
       ...values
     })

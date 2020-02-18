@@ -13,7 +13,7 @@ export const createStockAsync = (
   }
 ) => {
   dispatch(createStockRequest());
-  client
+  client()
     .post("/api/stocks/", {
       ...data
     })

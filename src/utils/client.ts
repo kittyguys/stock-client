@@ -8,11 +8,11 @@ const baseURL =
 
 const initialOptions = { baseURL };
 
-export default (() => {
+export default () => {
   const client = axios.create(initialOptions);
   const token = Cookies.get("jwt");
   if (token) {
     client.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
   return client;
-})();
+};
