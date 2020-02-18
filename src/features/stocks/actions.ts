@@ -13,6 +13,9 @@ export const CREATE_STOCK_FAIL = "stocks/create/FAIL";
 export const ADD_STOCK_REQUEST = "stocks/add/REQUEST";
 export const ADD_STOCK_SUCCESS = "stocks/add/SUCCESS";
 export const ADD_STOCK_FAIL = "stocks/add/FAIL";
+export const UPDATE_STOCK_REQUEST = "stocks/update/REQUEST";
+export const UPDATE_STOCK_SUCCESS = "stocks/update/SUCCESS";
+export const UPDATE_STOCK_FAIL = "stocks/update/FAIL";
 export const DELETE_STOCK_REQUEST = "stocks/delete/REQUEST";
 export const DELETE_STOCK_SUCCESS = "stocks/delete/SUCCESS";
 export const DELETE_STOCK_FAIL = "stocks/delete/FAIL";
@@ -80,6 +83,19 @@ export const addStockSuccess = (stock: Stock) => ({
 
 export const addStockFail = () => ({
   type: ADD_STOCK_FAIL
+});
+
+export const updateStockRequest = () => ({
+  type: UPDATE_STOCK_REQUEST
+});
+
+export const updateStockSuccess = (stock: Stock & { updated_at: string }) => ({
+  type: UPDATE_STOCK_SUCCESS,
+  payload: { stock }
+});
+
+export const updateStockFail = () => ({
+  type: UPDATE_STOCK_FAIL
 });
 
 export const deleteStockRequest = () => ({

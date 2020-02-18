@@ -1,3 +1,5 @@
+import { Stock as StockCommon } from "@src/features/stocks/types";
+
 export type State = {
   notes: [];
   note: any;
@@ -13,11 +15,7 @@ export type FormData = {
   content: string;
 };
 
-export type Stock = {
-  id: string;
-  content: string;
-  created_at: Date | string;
-};
+export type Stock = StockCommon;
 
 export type Notes = Array<{
   id: string;

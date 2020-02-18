@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
 import Toggle from "react-toggle";
 import { IoIosList as BaseIconDrawerOpen } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
 import StockList from "@src/common/components/shared/StockList";
 import { toggleDraggable } from "@src/features/stocks/actions";
-import { useDispatch, useSelector } from "react-redux";
+import { Stock } from "@src/features/stocks/types";
 
 type Props = {
   stocks: Stock[];
@@ -15,8 +16,6 @@ type Props = {
   editorHeightDiff?: number;
   note?: boolean;
 };
-
-type Stock = { id: string; content: string; created_at: Date | string };
 
 const StockNote: React.FC<Props> = ({
   stocks,
@@ -124,9 +123,9 @@ const SwitchContainer = styled.div`
   color: #555;
   font-weight: bold;
   font-size: 2rem;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   justify-content: flex-end;
-  padding: 0 5%;
+  padding: 0 6% 0 5%;
 `;
 
 const Message = styled.span`
@@ -135,7 +134,7 @@ const Message = styled.span`
 `;
 
 const DroppableInner = styled.div`
-  height: 100%;
+  min-height: 100%;
 `;
 
 const IconDrawerOpen = styled(BaseIconDrawerOpen)`
