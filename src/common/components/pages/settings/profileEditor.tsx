@@ -40,16 +40,19 @@ const ProfileEditor = () => {
           type="file"
           id="profile_image_url"
         />
+        <Label>id</Label>
         <InputUserName
           name="user_name"
           placeholder={profile.userName}
           ref={register}
         />
+        <Label>名前</Label>
         <InputUserName
           name="display_name"
           placeholder={profile.displayName}
           ref={register}
         />
+        <Label>メールアドレス</Label>
         <InputEmail name="email" placeholder={profile.email} ref={register} />
         <SaveButton type="submit" value="保存" />
       </form>
@@ -91,6 +94,14 @@ const SaveButton = styled.input`
 
 const InputAvatar = styled.input`
   display: none;
+`;
+
+const Label = styled.label`
+  width: 320px;
+  font-size: 1.4rem;
+  border-radius: 4px;
+  display: block;
+  margin: 0 auto 4px;
 `;
 
 const InputUserName = styled.input`

@@ -4,15 +4,15 @@ const Sidebar = () => {
   return (
     <SideBar>
       <SettingItem active>プロフィール</SettingItem>
-      <SettingItem>Apple</SettingItem>
-      <SettingItem>Spotify</SettingItem>
-      <SettingItem>Disney</SettingItem>
-      <SettingItem>Google</SettingItem>
-      <SettingItem>Amazon</SettingItem>
-      <SettingItem>Facebook</SettingItem>
-      <SettingItem>Netflix</SettingItem>
-      <SettingItem>Slack</SettingItem>
-      <SettingItem>Tesla</SettingItem>
+      <SettingItem>test</SettingItem>
+      <SettingItem>test</SettingItem>
+      <SettingItem>test</SettingItem>
+      <SettingItem>test</SettingItem>
+      <SettingItem>test</SettingItem>
+      <SettingItem>test</SettingItem>
+      <SettingItem>test</SettingItem>
+      <SettingItem>test</SettingItem>
+      <SettingItem>test</SettingItem>
     </SideBar>
   );
 };
@@ -49,4 +49,4 @@ const SettingItem = styled.div<{ active?: boolean }>`
   }
 `;
 
-export default Sidebar
+export default Sidebar;

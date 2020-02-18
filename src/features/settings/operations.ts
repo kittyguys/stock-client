@@ -32,9 +32,7 @@ export const updateProfile = (
       request({
         method: "patch",
         url: "/api/users/",
-        data: {
-          ...formData
-        }
+        data: formData
       })
         .then(({ data }) => {
           const token = Cookies.get("jwt");
