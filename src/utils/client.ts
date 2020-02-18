@@ -7,9 +7,9 @@ const baseURL =
     : process.env.BASE_URL;
 
 const initialOptions = { baseURL };
+const client = axios.create(initialOptions);
 
-export default () => {
-  const client = axios.create(initialOptions);
+export const createClient = () => {
   const token = Cookies.get("jwt");
   if (token) {
     client.defaults.headers.common["Authorization"] = `Bearer ${token}`;

@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
-import client from "@src/utils/client";
+import { createClient } from "@src/utils/client";
 import {
   signinRequest,
   signinSuccess,
@@ -12,7 +12,7 @@ import { FormValues } from "@src/common/components/pages/signin/types";
 
 export const signin = (dispatch: Dispatch<any>, values: FormValues) => {
   dispatch(signinRequest());
-  client()
+  createClient()
     .post("/api/auth/signin/", {
       ...values
     })

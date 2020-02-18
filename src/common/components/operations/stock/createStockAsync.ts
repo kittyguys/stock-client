@@ -1,4 +1,4 @@
-import client from "@src/utils/client";
+import { createClient } from "@src/utils/client";
 import {
   createStockRequest,
   createStockSuccess,
@@ -13,7 +13,7 @@ export const createStockAsync = (
   }
 ) => {
   dispatch(createStockRequest());
-  client()
+  createClient()
     .post("/api/stocks/", {
       ...data
     })
