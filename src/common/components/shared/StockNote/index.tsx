@@ -31,9 +31,11 @@ const StockNote: React.FC<Props> = ({
   const [scrolledAreaHeight, setScrolledAreaHeight] = useState(0);
   const [isInitialRendering, setIsInitialRendering] = useState(false);
   const [message, setMessage] = useState("");
-  const isDragDisabled = useSelector(
-    ({ stocks }: any) => stocks.isDragDisabled
-  );
+  const [initialMsg, setInitialMsg] = useState("");
+  const [isDragDisabled, isFetching] = useSelector(({ stocks }: any) => [
+    stocks.isDragDisabled,
+    stocks.isFetching
+  ]);
 
   useEffect(() => {
     if (scrollArea.current !== null) {
@@ -91,17 +93,21 @@ const StockNote: React.FC<Props> = ({
     }, 2000);
   }, [isDragDisabled]);
 
+  useEffect(() => {
+    setInitialMsg(
+      "メモがありません！下の入力フォームからメモを送信してみましょう！"
+    );
+  }, []);
+
   return (
     <>
       <SwitchContainer>
         <Message>{message}</Message>
         <Toggle defaultChecked={!isDragDisabled} onChange={handleBaconChange} />
       </SwitchContainer>
-      {stocks.length === 0 ? (
+      {stocks.length === 0 && !isFetching ? (
         <div className="scrollArea" ref={scrollArea}>
-          <EmptyMessage>
-            メモがありません！下の入力フォームからメモを送信してみましょう！
-          </EmptyMessage>
+          <EmptyMessage>{initialMsg}</EmptyMessage>
         </div>
       ) : (
         <Droppable droppableId={noteID}>
