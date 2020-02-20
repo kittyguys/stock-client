@@ -19,6 +19,7 @@ const UserModal: FC<Props> = () => {
   const handleSignout = () => {
     Cookies.remove("jwt");
     dispatch(signout());
+    dispatch({ type: "RESET_STORE" });
   };
   const handleRoute = (route: any) => {
     Router.push(`/${route}`);

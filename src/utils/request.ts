@@ -8,9 +8,9 @@ type InitialOptions = {
 
 export const createInstance = (options: any = {}) => {
   const baseURL =
-    process.env.NODE_ENV === "development" || !process.env.BASE_URL
+    process.env.NODE_ENV === "development" || !process.env.API_PATH
       ? "http://localhost:8080"
-      : process.env.BASE_URL;
+      : process.env.API_PATH;
   const initialOptions: InitialOptions = { baseURL, ...options };
   const token = Cookies.get("jwt");
 

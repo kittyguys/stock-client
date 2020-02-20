@@ -53,30 +53,5 @@ export const updateProfile = (
         console.log(err.message);
         dispatch(updateProfileFail());
       });
-  } else {
-    const request = createInstance();
-    request({
-      method: "patch",
-      url: "/api/users/",
-      data
-    })
-      .then(({ data }) => {
-        const token = Cookies.get("jwt");
-        const profile = token && jwt_decode<any>(token!); // TODO
-        if (!profile) {
-          return;
-        }
-        const updateDiff = jwt_decode<any>(data.token); // TODO
-        const newProfile = {
-          ...profile,
-          ...updateDiff
-        };
-        Cookies.set("jwt", data.token);
-        dispatch(updateProfileSuccess(newProfile));
-      })
-      .catch(err => {
-        console.log(err);
-        dispatch(updateProfileFail());
-      });
   }
 };
