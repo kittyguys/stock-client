@@ -31,7 +31,20 @@ icons["code-block"] = ReactDomServer.renderToString(
 icons["code"] = ReactDomServer.renderToString(<IoMdCode size="20px" />);
 
 hljs.configure({
-  languages: ["javascript", "ruby", "python"]
+  languages: [
+    "typescript",
+    "javascript",
+    "ruby",
+    "python",
+    "go",
+    "scala",
+    "java",
+    "kotlin",
+    "markdown",
+    "php",
+    "perl",
+    "swift"
+  ]
 });
 
 const modules = {
@@ -97,7 +110,6 @@ const modules = {
   },
   toolbar: {
     container: [
-      { header: [1, 2, 3, 4, 5, 6] },
       "bold",
       "italic",
       "underline",
@@ -111,7 +123,10 @@ const modules = {
     ]
   },
   syntax: {
-    highlight: (text: any) => hljs.highlightAuto(text).value
+    highlight: function(text: string) {
+      return hljs.highlightAuto(text).value;
+    },
+    interval: 100
   },
   "emoji-toolbar": true,
   "emoji-textarea": false,
@@ -173,6 +188,7 @@ const Editor: React.FC<Props> = ({
         onChange={handleChange}
         modules={modules}
         formats={formats}
+        placeholder="メモを入力..."
       />
       <SubmitButtonWrap>
         <SubmitButton onClick={onClickSubmit} disabled={isDisabled}>

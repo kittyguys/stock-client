@@ -1,9 +1,10 @@
 import dynamic from "next/dynamic";
-import { useState, FormEvent } from "react";
+import { useEffect, useState, FormEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import { format } from "date-fns";
+import hljs from "highlight.js";
 import {
   IoMdCreate as IconEdit,
   IoMdTrash as IconRemove
@@ -52,6 +53,12 @@ const StockCassette: React.FC<Props> = ({
     setIsEditable(false);
     dispatch(updateStockAsync(data));
   };
+
+  useEffect(() => {
+    document.querySelectorAll("pre").forEach(block => {
+      hljs.highlightBlock(block);
+    });
+  }, []);
 
   return (
     <Draggable

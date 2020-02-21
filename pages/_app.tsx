@@ -8,7 +8,7 @@ import { updateProfileSuccess } from "@src/features/profile/actions";
 import GlobalStyle from "@src/common/components/constants/GlobalStyle";
 import "react-quill/dist/quill.snow.css";
 import "react-toggle/style.css";
-import "highlight.js/styles/darcula.css";
+import "highlight.js/styles/github-gist.css";
 import "quill-emoji/dist/quill-emoji.css";
 
 interface Props {
