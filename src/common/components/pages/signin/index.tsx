@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import BaseLogo from "@src/common/components/shared/Logo";
-import { signin } from "@src/features/auth/operations";
+import { signin } from "@src/common/components/operations/signin/signin";
 import { FormValues } from "./types";
 
 const schema = yup.object().shape({
@@ -19,7 +19,7 @@ const SigninForm = () => {
   const error = useSelector(({ auth }: any) => auth.error);
   const dispatch = useDispatch();
   const onSubmit = (values: FormValues) => {
-    dispatch(signin(values));
+    signin(dispatch, values);
   };
   return (
     <Wrapper>
