@@ -4,9 +4,13 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import SigninForm from "@src/common/components/pages/signin";
+import { States } from "@src/app/types";
+import { State } from "@src/features/auth/types";
 
 const Signin: NextPage = () => {
-  const isSignin = useSelector((state: any) => state.auth.isSignin);
+  const isSignin = useSelector<States, State["isSignin"]>(
+    ({ auth }) => auth.isSignin
+  );
 
   useEffect(() => {
     if (isSignin) {

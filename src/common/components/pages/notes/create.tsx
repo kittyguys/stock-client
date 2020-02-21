@@ -26,6 +26,9 @@ import {
 } from "@src/features/notes/operations";
 import Drawer from "@src/common/components/pages/notes/_drawer";
 import { Stock } from "@src/common/components/pages/stock/types";
+import { States } from "@src/app/types";
+import { State as StocksState } from "@src/features/stocks/types";
+import { State as NotesState } from "@src/features/notes/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -37,11 +40,15 @@ const StockNoteCreate: React.FC = () => {
 
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const [stocks, notes, note] = useSelector((state: any) => [
-    state.stocks.stocks,
-    state.notes.notes,
-    state.notes.note
-  ]);
+  const stocks = useSelector<States, StocksState["stocks"]>(
+    ({ stocks }) => stocks.stocks
+  );
+  const notes = useSelector<States, NotesState["notes"]>(
+    ({ notes }) => notes.notes
+  );
+  const note = useSelector<States, NotesState["note"]>(
+    ({ notes }) => notes.note
+  );
 
   const isNote = (id: string) => id === "note";
   const getList = (id: string) => (isNote(id) ? note.stocks : stocks);

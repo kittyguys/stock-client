@@ -5,7 +5,7 @@ export type State = {
   isDeleteModalOpen: boolean;
   isFetching: boolean;
   selectedStockId: string;
-  stocks: [];
+  stocks: Stock[];
 };
 
 export type Action = {

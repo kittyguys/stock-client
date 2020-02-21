@@ -1,8 +1,6 @@
-import { NextPage } from "next";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import Router from "next/router";
 import { IoIosSearch } from "react-icons/io";
 import BaseMainInputForm, {
   MainInput as BaseMainInput
@@ -13,17 +11,18 @@ import { useSelector } from "react-redux";
 import Nav from "./_nav";
 import { UserModal } from "@src/common/components/shared/Modals";
 import Color from "@src/common/constants/color";
+import { States } from "@src/app/types";
+import { State } from "@src/features/auth/types";
 
 type Props = {
   route?: string;
 };
 
-const Header: NextPage<Props> = ({ route }) => {
-  const isSignin = useSelector((state: any) => state.auth.isSignin);
+const Header: React.FC<Props> = ({ route }) => {
+  const isSignin = useSelector<States, State["isSignin"]>(
+    ({ auth }) => auth.isSignin
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const toHome = () => {
-    Router.push("/");
-  };
 
   const onButtonClick = () => {
     setIsModalOpen(!isModalOpen);

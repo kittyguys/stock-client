@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
@@ -18,13 +18,12 @@ import Color from "@src/common/constants/color";
 import StockNote from "@src/common/components/shared/StockNote";
 import { reorderStocks } from "@src/features/stocks/actions";
 import { getStocksAsync, addStockAsync } from "@src/features/stocks/operations";
-import { Stock } from "@src/features/stocks/types";
+import { Stock, State } from "@src/features/stocks/types";
+import { States } from "@src/app/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
 });
-
-type Props = {};
 
 // TODO 型定義を types ファイルにまとめたい
 type StockLists = {
@@ -78,17 +77,25 @@ const move = (
   return result;
 };
 
-const Stocks: NextPage<Props> = () => {
+const Stocks: NextPage = () => {
   // SSR の場合にこの関数を使用する必要がある
   resetServerContext();
 
   const [stockLists, setStockLists] = useState(initialStockLists);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const isNoteOpen = useSelector((state: any) => state.stocks.isNoteEditing);
-  const initialStocks = useSelector((state: any) => state.stocks.stocks);
+  const isNoteOpen = useSelector<States, State["isNoteEditing"]>(
+    ({ stocks }) => stocks.isNoteEditing
+  );
+  const initialStocks = useSelector<States, State["stocks"]>(
+    ({ stocks }) => stocks.stocks
+  );
   const [stocks, setStocks] = useState(
-    initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content }))
+    initialStocks.map(v => ({
+      id: "" + v.id,
+      content: v.content,
+      created_at: v.created_at
+    }))
   );
   /**
    * A semi-generic way to handle multiple lists. Matches
@@ -139,7 +146,11 @@ const Stocks: NextPage<Props> = () => {
   useEffect(() => {
     if (initialStocks.length > 0) {
       setStocks(
-        initialStocks.map((v: any) => ({ id: "" + v.id, content: v.content }))
+        initialStocks.map(v => ({
+          id: "" + v.id,
+          content: v.content,
+          created_at: v.created_at
+        }))
       );
     }
   }, [initialStocks]);
@@ -161,7 +172,7 @@ const Stocks: NextPage<Props> = () => {
     [inputValue]
   );
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     const data = { content: inputValue };
     e.preventDefault();
     setInputValue("");

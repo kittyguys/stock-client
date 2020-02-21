@@ -1,7 +1,7 @@
 import { Stock as StockCommon } from "@src/features/stocks/types";
 
 export type State = {
-  notes: [];
+  notes: Notes;
   note: any;
   activeId: string;
 };

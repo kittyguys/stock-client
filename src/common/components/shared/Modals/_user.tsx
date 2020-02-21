@@ -5,12 +5,14 @@ import styled from "styled-components";
 import Cookies from "js-cookie";
 import { signout } from "@src/features//auth/actions";
 import BaseAvatar from "../Avatar";
+import { States } from "@src/app/types";
+import { State } from "@src/features/profile/types";
 
 type Props = {};
 
 const UserModal: FC<Props> = () => {
   const dispatch = useDispatch();
-  const profile = useSelector((state: any) => state.profile);
+  const profile = useSelector<States, State>(({ profile }) => profile);
   const handleClick = (e: any) => {
     e.stopPropagation();
   };

@@ -2,11 +2,13 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { openDeleteModal } from "@src/features/stocks/actions";
 import { deleteStockAsync } from "@src/features/stocks/operations";
+import { States } from "@src/app/types";
+import { State } from "@src/features/stocks/types";
 
 export const DeleteStockModal: React.FC = () => {
   const dispatch = useDispatch();
-  const selectedStockId = useSelector(
-    ({ stocks }: any) => stocks.selectedStockId
+  const selectedStockId = useSelector<States, State["selectedStockId"]>(
+    ({ stocks }) => stocks.selectedStockId
   );
   const closeModal = (e: any) => {
     dispatch(openDeleteModal());

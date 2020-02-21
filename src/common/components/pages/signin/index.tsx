@@ -6,6 +6,8 @@ import * as yup from "yup";
 import BaseLogo from "@src/common/components/shared/Logo";
 import { signin } from "@src/features/auth/operations";
 import { FormValues } from "./types";
+import { States } from "@src/app/types";
+import { State } from "@src/features/auth/types";
 
 const schema = yup.object().shape({
   signinID: yup.string().required("idは必須項目です。"),
@@ -16,7 +18,7 @@ const SigninForm = () => {
   const { register, handleSubmit, errors } = useForm<FormValues>({
     validationSchema: schema
   });
-  const error = useSelector(({ auth }: any) => auth.error);
+  const error = useSelector<States, State["error"]>(({ auth }) => auth.error);
   const dispatch = useDispatch();
   const onSubmit = (values: FormValues) => {
     dispatch(signin(values));
