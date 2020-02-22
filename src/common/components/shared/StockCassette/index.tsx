@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useEffect, useState, FormEvent } from "react";
+import { useEffect, useState, FormEvent, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
@@ -34,6 +34,7 @@ const StockCassette: React.FC<Props> = ({
   index
 }: Props) => {
   const dispatch = useDispatch();
+  const codeBlock = useRef<any>(null);
   const isDragDisabled = useSelector<States, State["isDragDisabled"]>(
     ({ stocks }) => stocks.isDragDisabled
   );
@@ -55,9 +56,12 @@ const StockCassette: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    document.querySelectorAll("pre").forEach(block => {
-      hljs.highlightBlock(block);
-    });
+    if (codeBlock) {
+      const nodes = codeBlock.current.querySelectorAll("pre");
+      nodes?.forEach((node: any) => {
+        hljs.highlightBlock(node);
+      });
+    }
   }, []);
 
   return (
@@ -114,6 +118,7 @@ const StockCassette: React.FC<Props> = ({
                 <div className="ql-snow">
                   <Content className="markdown forStyle forStyle2">
                     <Text
+                      ref={codeBlock}
                       className="ql-editor"
                       dangerouslySetInnerHTML={{ __html: stock.content }}
                     />
