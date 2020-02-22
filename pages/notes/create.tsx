@@ -7,7 +7,7 @@ import { updateProfileSuccess } from "@src/features/profile/actions";
 import Header from "@src/common/components/shared/Header";
 import StockNoteCreate from "@src/common/components/pages/notes/create";
 
-const Stock: NextPage = ({}) => {
+const Stock: NextPage = () => {
   return (
     <>
       <Header route="/stock" />

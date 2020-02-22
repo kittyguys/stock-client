@@ -6,6 +6,7 @@ const initialState: State = {
   isDrawerOpen: false,
   isDragDisabled: true,
   isDeleteModalOpen: false,
+  isFetching: false,
   selectedStockId: "",
   stocks: []
 };
@@ -37,13 +38,16 @@ const stocks = produce((state = initialState, action: Action) => {
       return state;
     }
     case "stocks/get/REQUEST": {
+      state.isFetching = !state.isFetching;
       return state;
     }
     case "stocks/get/SUCCESS": {
       state.stocks = action.payload.stocks;
+      state.isFetching = !state.isFetching;
       return state;
     }
     case "stocks/get/FAIL": {
+      state.isFetching = !state.isFetching;
       return state;
     }
     case "stocks/create/REQUEST": {

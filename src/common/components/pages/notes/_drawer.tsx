@@ -5,13 +5,20 @@ import { IoMdClose as BaseIconDrawerClose } from "react-icons/io";
 import { toggleDrawer } from "@src/features/stocks/actions";
 import { switchActiveId } from "@src/features/notes/actions";
 import Color from "@src/common/constants/color";
+import { States } from "@src/app/types";
+import { State as StocksState } from "@src/features/stocks/types";
+import { State as NotesState } from "@src/features/notes/types";
 
 type Props = {};
 
 const Drawer: FC<Props> = ({}) => {
   const dispatch = useDispatch();
-  const isDrawerOpen = useSelector((state: any) => state.stocks.isDrawerOpen);
-  const activeId = useSelector((state: any) => state.notes.activeId);
+  const isDrawerOpen = useSelector<States, StocksState["isDrawerOpen"]>(
+    ({ stocks }) => stocks.isDrawerOpen
+  );
+  const activeId = useSelector<States, NotesState["activeId"]>(
+    ({ notes }) => notes.activeId
+  );
   // TODO notes一覧完成後削除
   const tmpList = [
     {

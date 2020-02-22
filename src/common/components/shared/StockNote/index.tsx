@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import StockList from "@src/common/components/shared/StockList";
 import { toggleDraggable } from "@src/features/stocks/actions";
 import { Stock } from "@src/features/stocks/types";
+import { States } from "@src/app/types";
+import { State } from "@src/features/stocks/types";
 
 type Props = {
   stocks: Stock[];
@@ -31,9 +33,13 @@ const StockNote: React.FC<Props> = ({
   const [scrolledAreaHeight, setScrolledAreaHeight] = useState(0);
   const [isInitialRendering, setIsInitialRendering] = useState(false);
   const [message, setMessage] = useState("");
-  const isDragDisabled = useSelector(
-    ({ stocks }: any) => stocks.isDragDisabled
+  const isDragDisabled = useSelector<States, State["isDragDisabled"]>(
+    ({ stocks }) => stocks.isDragDisabled
   );
+  const isFetching = useSelector<States, State["isFetching"]>(
+    ({ stocks }) => stocks.isFetching
+  );
+  const [initialMsg, setInitialMsg] = useState("");
 
   useEffect(() => {
     if (scrollArea.current !== null) {
@@ -91,32 +97,49 @@ const StockNote: React.FC<Props> = ({
     }, 2000);
   }, [isDragDisabled]);
 
+  useEffect(() => {
+    setInitialMsg(
+      "メモがありません！下の入力フォームからメモを送信してみましょう！"
+    );
+  }, []);
+
   return (
     <>
       <SwitchContainer>
         <Message>{message}</Message>
         <Toggle defaultChecked={!isDragDisabled} onChange={handleBaconChange} />
       </SwitchContainer>
-      <Droppable droppableId={noteID}>
-        {provided => {
-          return (
-            <div className="scrollArea" ref={scrollArea}>
-              <DroppableInner
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                <div ref={scrolledArea}>
-                  <StockList stocks={stocks} note={note} />
-                  {provided.placeholder}
-                </div>
-              </DroppableInner>
-            </div>
-          );
-        }}
-      </Droppable>
+      {stocks.length === 0 && !isFetching ? (
+        <div className="scrollArea" ref={scrollArea}>
+          <EmptyMessage>{initialMsg}</EmptyMessage>
+        </div>
+      ) : (
+        <Droppable droppableId={noteID}>
+          {provided => {
+            return (
+              <div className="scrollArea" ref={scrollArea}>
+                <DroppableInner
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  <div ref={scrolledArea}>
+                    <StockList stocks={stocks} note={note} />
+                    {provided.placeholder}
+                  </div>
+                </DroppableInner>
+              </div>
+            );
+          }}
+        </Droppable>
+      )}
     </>
   );
 };
+
+const EmptyMessage = styled.span`
+  font-size: 2rem;
+  font-weight: bold;
+`;
 
 const SwitchContainer = styled.div`
   display: flex;

@@ -2,6 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { AiOutlineUser } from "react-icons/ai";
+import { States } from "@src/app/types";
+import { State } from "@src/features/profile/types";
 
 type Props = {
   className?: string;
@@ -16,8 +18,8 @@ const Avatar: React.FC<Props> = ({
   editable,
   iconSize
 }) => {
-  const profile_image = useSelector(
-    (state: any) => state.profile.profile_image_url
+  const profile_image = useSelector<States, State["profile_image_url"]>(
+    ({ profile }) => profile.profile_image_url
   );
   const src = imageSrc || profile_image;
   const size = iconSize || "28px";

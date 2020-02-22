@@ -1,14 +1,16 @@
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, KeyboardEventHandler } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { getNotesAsync, createNoteAsync } from "@src/features/notes/operations";
+import { States } from "@src/app/types";
+import { State } from "@src/features/notes/types";
 
 const Notes: React.FC = () => {
   const dispatch = useDispatch();
-  const notes = useSelector(({ notes }: any) => notes.notes);
+  const notes = useSelector<States, State["notes"]>(({ notes }) => notes.notes);
 
-  const noteList = notes.map((item: any) => {
+  const noteList = notes.map(item => {
     return (
       <Link href={`/notes/${item.id}`} key={item.id}>
         <LinkStyle>
@@ -18,9 +20,9 @@ const Notes: React.FC = () => {
     );
   });
 
-  const onSubmit = ({ target, keyCode }: any) => {
-    if (keyCode === 13) {
-      dispatch(createNoteAsync(target.value));
+  const onSubmit: KeyboardEventHandler<HTMLInputElement> = e => {
+    if (e.keyCode === 13) {
+      dispatch(createNoteAsync((e.target as HTMLInputElement).value));
     }
   };
 

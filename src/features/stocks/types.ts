@@ -3,8 +3,9 @@ export type State = {
   isDrawerOpen: boolean;
   isDragDisabled: boolean;
   isDeleteModalOpen: boolean;
+  isFetching: boolean;
   selectedStockId: string;
-  stocks: [];
+  stocks: Stock[];
 };
 
 export type Action = {

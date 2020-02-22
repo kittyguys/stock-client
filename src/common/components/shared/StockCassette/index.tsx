@@ -1,9 +1,10 @@
 import dynamic from "next/dynamic";
-import { useState, FormEvent } from "react";
+import { useEffect, useState, FormEvent, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import { format } from "date-fns";
+import hljs from "highlight.js";
 import {
   IoMdCreate as IconEdit,
   IoMdTrash as IconRemove
@@ -11,6 +12,8 @@ import {
 import Color from "@src/common/constants/color";
 import { selectStock, openDeleteModal } from "@src/features/stocks/actions";
 import { updateStockAsync } from "@src/features/stocks/operations";
+import { States } from "@src/app/types";
+import { State, Stock } from "@src/features/stocks/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -19,12 +22,7 @@ const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
 type Props = {
   className?: string;
   // TODO 型定義を types ファイルにまとめたい
-  stock: {
-    id: string;
-    content: string;
-    created_at?: Date | string;
-    updated_at?: Date | string;
-  };
+  stock: Stock;
   note?: boolean;
   index: number;
 };
@@ -36,8 +34,9 @@ const StockCassette: React.FC<Props> = ({
   index
 }: Props) => {
   const dispatch = useDispatch();
-  const isDragDisabled = useSelector(
-    ({ stocks }: any) => stocks.isDragDisabled
+  const codeBlock = useRef<any>(null);
+  const isDragDisabled = useSelector<States, State["isDragDisabled"]>(
+    ({ stocks }) => stocks.isDragDisabled
   );
 
   const removeStock = (id: string) => {
@@ -55,6 +54,15 @@ const StockCassette: React.FC<Props> = ({
     setIsEditable(false);
     dispatch(updateStockAsync(data));
   };
+
+  useEffect(() => {
+    if (codeBlock) {
+      const nodes = codeBlock.current.querySelectorAll("pre");
+      nodes?.forEach((node: any) => {
+        hljs.highlightBlock(node);
+      });
+    }
+  }, []);
 
   return (
     <Draggable
@@ -110,6 +118,7 @@ const StockCassette: React.FC<Props> = ({
                 <div className="ql-snow">
                   <Content className="markdown forStyle forStyle2">
                     <Text
+                      ref={codeBlock}
                       className="ql-editor"
                       dangerouslySetInnerHTML={{ __html: stock.content }}
                     />

@@ -8,17 +8,16 @@ import { signinSuccess } from "@src/features/auth/actions";
 import { updateProfileSuccess } from "@src/features/profile/actions";
 import Header from "@src/common/components/shared/Header";
 import UserRoot from "@src/common/components/pages/root";
-
-type Props = {
-  store: States;
-};
+import { State } from "@src/features/auth/types";
 
 interface Context extends NextPageContext {
   store: any;
 }
 
-const Root: NextPage<Props> = ({ store }) => {
-  const isSignin = useSelector((state: any) => state.auth.isSignin);
+const Root: NextPage = () => {
+  const isSignin = useSelector<States, State["isSignin"]>(
+    ({ auth }) => auth.isSignin
+  );
 
   if (isSignin) {
     return (

@@ -138,7 +138,7 @@ Twitter: @rich_clark
     .ql-editor {
       background: none;
       padding: 0;
-      max-height: 24rem;
+      padding-top: 4px;
       font-size: 1.3rem;
     }
     strong {

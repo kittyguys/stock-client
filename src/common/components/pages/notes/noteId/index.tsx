@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
@@ -25,6 +25,8 @@ import {
   createNoteAndAddStockAsync,
   reorderNoteAsync
 } from "@src/features/notes/operations";
+import { States } from "@src/app/types";
+import { State } from "@src/features/notes/types";
 
 const Editor = dynamic(() => import("@src/common/components/shared/Editor"), {
   ssr: false
@@ -37,7 +39,7 @@ const Notes: React.FC = () => {
   const [isSignin, setIsSignin] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const note = useSelector(({ notes }: any) => notes.note);
+  const note = useSelector<States, State["note"]>(({ notes }) => notes.note);
   const router = useRouter();
   const stocks = note.stocks;
 
@@ -77,7 +79,7 @@ const Notes: React.FC = () => {
     [inputValue]
   );
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     const data = { content: inputValue };
     e.preventDefault();
     setInputValue("");
