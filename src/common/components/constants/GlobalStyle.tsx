@@ -137,8 +137,7 @@ Twitter: @rich_clark
   .markdown.forStyle.forStyle2 {
     .ql-editor {
       background: none;
-      padding: 0;
-      padding-top: 4px;
+      padding: 4px 0;
       font-size: 1.3rem;
     }
     strong {
