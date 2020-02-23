@@ -1,5 +1,5 @@
 import { NextPage, NextPageContext } from "next";
-import { useSelector } from "react-redux";
+import { Store } from "redux";
 import cookies from "next-cookies";
 import jwt_decode from "jwt-decode";
 import Signup from "./signup";
@@ -7,23 +7,24 @@ import { States } from "@src/app/types";
 import { signinSuccess } from "@src/features/auth/actions";
 import { updateProfileSuccess } from "@src/features/profile/actions";
 import Header from "@src/common/components/shared/Header";
-import UserRoot from "@src/common/components/pages/root";
-import { State } from "@src/features/auth/types";
+import Home from "@src/common/components/pages";
+
+type Props = {
+  store: States;
+};
 
 interface Context extends NextPageContext {
-  store: any;
+  store: Store<States>;
 }
 
-const Root: NextPage = () => {
-  const isSignin = useSelector<States, State["isSignin"]>(
-    ({ auth }) => auth.isSignin
-  );
+const Root: NextPage<Props> = ({ store }) => {
+  const isSignin = store.auth.isSignin;
 
   if (isSignin) {
     return (
       <>
         <Header route="/stock" />
-        <UserRoot />
+        <Home />
       </>
     );
   }
@@ -39,7 +40,7 @@ Root.getInitialProps = (ctx: Context) => {
     ctx.store.dispatch(signinSuccess());
     ctx.store.dispatch(updateProfileSuccess(profile));
   }
-  return { store: ctx.store };
+  return { store: ctx.store.getState() };
 };
 
 export default Root;
