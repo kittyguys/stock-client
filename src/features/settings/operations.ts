@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { ThunkAction } from "redux-thunk";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { createInstance } from "@src/utils/request";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
@@ -23,17 +23,11 @@ export const updateProfile = (
     for (let i = 0; i < entries.length; i++) {
       formData.append(entries[i][0], entries[i][1]);
     }
-    const request = createInstance({
-      headers: {
-        "Content-Type": "multipart/form-data"
-      }
-    });
+    const request = createInstance();
     request({
       method: "patch",
       url: "/api/users/",
-      data: {
-        ...formData
-      }
+      data: formData
     })
       .then(({ data }) => {
         const token = Cookies.get("jwt");
